@@ -4,15 +4,17 @@ A movie web application built with **React** and **Vite**, powered by the **TMDB
 
 ## Features
 
+* Login via TMDB
 * Filter popular TV shows and movies, top-rated, by genre, and by country.
 * Search for movies by title.
 * View detailed movie information.
-* Save favorite movies or tv shows.
-* Save a watchlist movies or tv shows.
+* Save and watch your favorite movies or TV shows.
+* Save and watch your favorite movie or TV show watchlist.
 * View user profile.
-* Rate movies or tv shows.
+* Rate movies or TV shows.
 * View reviews.
 * Watch trailer.
+  
 
 ## Setup
 

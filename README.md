@@ -9,10 +9,6 @@ A movie web application built with **React** and **Vite**, powered by the **TMDB
 * View detailed movie information.
 * Save favorite movies locally.
 
-## Demo
-
-*Add a link to a live demo if available.*
-
 ## Setup
 
 1. **Clone the repository:**

@@ -1,16 +1,64 @@
-# React + Vite
+# Movie Web (React + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A movie web application built with **React** and **Vite**, powered by the **TMDB API**.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+* Browse popular, top-rated, and upcoming movies.
+* Search for movies by title.
+* View detailed movie information.
+* Save favorite movies locally.
 
-## React Compiler
+## Demo
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+*Add a link to a live demo if available.*
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. **Clone the repository:**
+
+```bash
+git clone <your-repo-url>
+cd <your-repo-folder>
+```
+
+2. **Install dependencies:**
+
+```bash
+npm install
+```
+
+3. **Create a `.env` file based on `.env.example` and add your TMDB API key:**
+
+```env
+VITE_TMDB_TOKEN="your_api_key_here"
+```
+
+> ⚠️ **Important:** Do not commit your `.env` file to GitHub. It is ignored in `.gitignore`.
+
+4. **Run the app:**
+
+```bash
+npm run dev
+```
+
+5. **Open in browser:**
+   The app will usually be available at [http://localhost:5173](http://localhost:5173)
+
+## Notes
+
+* You need a TMDB account to get an API key: [TMDB API](https://www.themoviedb.org/documentation/api)
+* The `.env.example` file is provided so you know what variables to set.
+
+## Technologies Used
+
+* React
+* Vite
+* Axios
+* Tailwind CSS
+* React Router DOM
+* React Icons
+
+## License
+
+MIT License

@@ -12,6 +12,7 @@ A movie web application built with **React** and **Vite**, powered by the **TMDB
 * View user profile.
 * Rate movies or tv shows.
 * View reviews.
+* watch trailer.
 
 ## Setup
 

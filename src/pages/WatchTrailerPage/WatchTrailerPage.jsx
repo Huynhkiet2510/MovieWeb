@@ -6,9 +6,13 @@ import axios from "axios";
 const WatchTrailerPage = () => {
     const { media, id } = useParams();
     const [trailerKey, setTrailerKey] = useState(null);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+
     const navigate = useNavigate();
 
     useEffect(() => {
+        const controller = new AbortController();
         const fetchTrailer = async () => {
             try {
                 const headers = {
@@ -17,8 +21,10 @@ const WatchTrailerPage = () => {
                 };
 
                 const res = await axios.get(
-                    `https://api.themoviedb.org/3/${media}/${id}/videos`,
-                    { headers }
+                    `https://api.themoviedb.org/3/${media}/${id}/videos`, {
+                    signal: controller.signal,
+                    headers
+                }
                 );
 
                 const videos = res.data.results;
@@ -27,24 +33,33 @@ const WatchTrailerPage = () => {
                 );
 
                 if (trailer) setTrailerKey(trailer.key);
-            } catch (err) {
-                console.error(err);
+            } catch (error) {
+                if (axios.isCancel(error)) return;
+                console.error("Lỗi khi lấy dữ liệu", error);
+                setError(error)
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchTrailer();
+        return () => controller.abort();
+
     }, [media, id]);
 
     const handleBack = () => {
         if (window.history.length > 1) {
             navigate(-1);
         } else {
-            navigate("/"); // fallback an toàn
+            navigate("/");
         }
     };
 
 
+    if (loading) return <div>Loading ...</div>
+    if (error) return <div className="text-red-500">Lỗi khi tải danh sách yêu thích!</div>
     if (!trailerKey) return <p className="col-span-8 bg-[#14161D] w-80 text-center p-10 mt-8 mx-auto rounded-2xl text-sm text-gray-400">Không có trailer</p>;
+
 
     return (
         <div className="relative w-full h-screen bg-black flex justify-center items-center p-4">

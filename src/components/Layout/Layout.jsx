@@ -8,7 +8,7 @@ const Layout = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
-  const [selectedType, setSelectedType] = useState("movie");
+  const [selectedType, setSelectedType] = useState(null);
 
   const [genres, setGenres] = useState([]);
   const [countries, setCountries] = useState([]);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Review from '../Review/Review';
 import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark, FaStar, FaPlay, FaArrowLeft } from "react-icons/fa";
@@ -10,10 +10,14 @@ const MovieDetail = () => {
   const { media, id } = useParams();
   const selectedType = media;
   const navigate = useNavigate();
+  const favControllerRef = useRef(null);
+  const watchControllerRef = useRef(null);
 
   const [movie, setMovie] = useState(null);
   const [director, setDirector] = useState('');
   const [cast, setCast] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isWatchList, setIsWatchList] = useState(false);
 
@@ -21,6 +25,8 @@ const MovieDetail = () => {
   const session_id = localStorage.getItem("session_id");
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchDetail = async () => {
       try {
         const headers = {
@@ -30,7 +36,10 @@ const MovieDetail = () => {
 
         const detailRes = await axios.get(
           `https://api.themoviedb.org/3/${selectedType}/${id}`,
-          { headers }
+          {
+            signal: controller.signal,
+            headers
+          }
         );
         setMovie(detailRes.data);
 
@@ -38,7 +47,10 @@ const MovieDetail = () => {
         if (selectedType === 'movie') {
           creditsRes = await axios.get(
             `https://api.themoviedb.org/3/movie/${id}/credits`,
-            { headers }
+            {
+              signal: controller.signal,
+              headers
+            }
           );
 
           const crew = creditsRes.data.crew || [];
@@ -50,26 +62,37 @@ const MovieDetail = () => {
           if (user && session_id) {
             const favRes = await axios.get(
               `https://api.themoviedb.org/3/account/${user.id}/favorite/movies?session_id=${session_id}`,
-              { headers }
+              {
+                signal: controller.signal,
+                headers
+              }
             );
             setIsFavorite(favRes.data.results.some(m => m.id === Number(id)));
           }
         } else if (selectedType === 'tv') {
           creditsRes = await axios.get(
             `https://api.themoviedb.org/3/tv/${id}/credits`,
-            { headers }
+            {
+              signal: controller.signal,
+              headers
+            }
           );
           const castList = creditsRes.data.cast || [];
           setDirector(detailRes.data.created_by.map(c => c.name).join(', ') || "Không rõ");
           setCast(castList.slice(0, 5));
         }
 
-      } catch (err) {
-        console.error("Lỗi khi fetch detail:", err);
+      } catch (error) {
+        if (axios.isCancel(error)) return;
+        console.error("Lỗi khi fetch detail:", error);
+        setError(error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchDetail();
+    return () => controller.abort();
   }, [id, selectedType]);
 
   const toggleFavorite = async () => {
@@ -77,6 +100,66 @@ const MovieDetail = () => {
       toast.error("Bạn cần đăng nhập TMDB để dùng tính năng Yêu thích 😢");
       return;
     }
+
+    // Hủy request favorite cũ (nếu có) để tránh race / spam
+    favControllerRef.current?.abort();
+
+    // Tạo controller mới cho request hiện tại và lưu vào ref
+    const controller = new AbortController();
+    favControllerRef.current = controller;
+
+    try {
+      const headers = {
+        Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
+        accept: "application/json",
+        "Content-Type": "application/json",
+      };
+
+      // Gọi API — gắn signal để có thể hủy nếu cần
+      await axios.post(
+        `https://api.themoviedb.org/3/account/${user.id}/favorite?session_id=${session_id}`,
+        {
+          media_type: media,
+          media_id: Number(id),
+          favorite: !isFavorite,
+        },
+        { headers, signal: controller.signal }
+      );
+
+      // Chỉ cập nhật UI khi request thành công
+      setIsFavorite(prev => !prev);
+      toast.success(
+        !isFavorite
+          ? "Đã thêm vào danh sách yêu thích 🎉"
+          : "Đã xóa khỏi danh sách yêu thích ❌"
+      );
+    } catch (error) {
+      // Nếu request bị hủy (abort) thì không coi là lỗi
+      if (axios.isCancel(error)) {
+        console.log("⛔ Request favorite đã bị hủy");
+        return;
+      }
+      console.error("Lỗi favorite:", error);
+      toast.error("Thêm phim vào danh sách yêu thích thất bại 😢");
+      setError(error);
+    } finally {
+      // Giải phóng ref (không hủy ở đây, chỉ clear ref)
+      if (favControllerRef.current === controller) favControllerRef.current = null;
+    }
+  };
+
+  const toggleWatchList = async () => {
+    if (!user || !session_id) {
+      toast.error("Bạn cần đăng nhập TMDB để dùng tính năng Danh sách 😢");
+      return;
+    }
+
+    // Hủy request watchlist cũ (nếu có)
+    watchControllerRef.current?.abort();
+
+    // Tạo controller mới cho request hiện tại và lưu vào ref
+    const controller = new AbortController();
+    watchControllerRef.current = controller;
 
     try {
       const headers = {
@@ -86,54 +169,45 @@ const MovieDetail = () => {
       };
 
       await axios.post(
-        `https://api.themoviedb.org/3/account/${user.id}/favorite?session_id=${session_id}`,
-        {
-          media_type: media,
-          media_id: Number(id),
-          favorite: !isFavorite
-        },
-        { headers }
-      );
-
-      setIsFavorite(!isFavorite);
-      toast.success("Thêm phim vào danh sách yêu thích thành công 🎉")
-    } catch (error) {
-      console.error("Lỗi favorite:", error);
-      toast.error("Thêm phim vào danh sách yêu thích thất bại 😢");
-    }
-  };
-
-  const toggleWatchList = async () => {
-    if (!user || !session_id) {
-      toast.error("Bạn cần đăng nhập TMDB để dùng tính năng Danh sách 😢");
-      return;
-    }
-    try {
-      const headers = {
-        Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-        accept: "application/json",
-        "Content-Type": "application/json",
-      };
-
-      await axios.post(`https://api.themoviedb.org/3/account/${user.id}/watchlist?session_id=${session_id}`,
+        `https://api.themoviedb.org/3/account/${user.id}/watchlist?session_id=${session_id}`,
         {
           media_type: media,
           media_id: Number(id),
           watchlist: !isWatchList,
         },
-        { headers });
+        { headers, signal: controller.signal }
+      );
 
-      setIsWatchList(!isWatchList);
-      toast.success("Thêm phim vào danh sách mong muốn thành công 🎉")
+      setIsWatchList(prev => !prev);
+      toast.success(
+        !isWatchList
+          ? "Đã thêm vào danh sách xem sau 🎉"
+          : "Đã xóa khỏi danh sách xem sau ❌"
+      );
     } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu", error)
+      if (axios.isCancel(error)) {
+        console.log("⛔ Request watchlist đã bị hủy");
+        return;
+      }
+      console.error("Lỗi watchlist:", error);
       toast.error("Thêm phim vào danh sách mong muốn thất bại 😢");
+      setError(error);
+    } finally {
+      if (watchControllerRef.current === controller) watchControllerRef.current = null;
     }
-  }
+  };
+
+
+  useEffect(() => {
+    return () => {
+      favControllerRef.current?.abort();
+      watchControllerRef.current?.abort();
+    };
+  }, []);
+
 
   if (!movie) return <p className="movie-loading">Đang tải...</p>;
 
-  // Thời lượng
   let duration = "Không rõ";
   if (selectedType === "movie" && movie.runtime > 0) duration = `${movie.runtime} phút`;
   else if (selectedType === "tv" && Array.isArray(movie.episode_run_time)) {
@@ -141,6 +215,9 @@ const MovieDetail = () => {
     if (times.length === 1) duration = `${times[0]} phút / tập`;
     else if (times.length > 1) duration = `${Math.min(...times)}–${Math.max(...times)} phút / tập`;
   }
+
+  if (loading) return <div>Loading ...</div>
+  if (error) return <div className="text-red-500">Lỗi khi tải danh sách yêu thích!</div>
 
   return (
     <div className="movie-detail">

@@ -1,69 +1,21 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { FaHeart, FaPlus, FaUser, FaBell } from "react-icons/fa";
+import SideBar from "../../components/SideBar/SideBar";
 
 const AccountPage = () => {
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
-  const location = useLocation();
+
 
   useEffect(() => {
     const data = localStorage.getItem("tmdb_user");
     if (data) setUser(JSON.parse(data));
   }, []);
 
-  const isActive = (path) => location.pathname === path;
 
   if (!user) return <p className="text-center mt-10">Đang tải...</p>;
 
   return (
     <div className="flex min-h-screen">
-      <aside className="bg-[#25272F] w-[350px] h-[705px] p-10 m-5 rounded-2xl">
-        <h2 className="font-bold text-lg mb-8">Quản Lý Tài Khoản</h2>
-        <ul className="space-y-4">
-          <li>
-            <button
-              className={`flex items-center gap-2 cursor-pointer transition-colors duration-200 
-                        ${isActive("/favorite") ? "text-red-600 font-semibold" : "hover:text-red-600"}`}
-              onClick={() => navigate("/favorite")}
-            >
-              <FaHeart />
-              <span>Yêu thích</span>
-            </button>
-          </li>
-          <hr className="text-gray-500" />
-          <li>
-            <button
-              className={`flex items-center gap-2 cursor-pointer transition-colors duration-200
-                        ${isActive("/wishlist") ? "text-red-600 font-semibold" : "hover:text-red-600"}`}
-              onClick={() => navigate("/wishlist")}
-            >
-              <FaPlus />
-              <span>Danh sách</span>
-            </button>
-          </li>
-          <hr className="text-gray-500" />
-          <li>
-            <button
-              className={`flex items-center gap-2 cursor-pointer transition-colors duration-200 
-                        ${isActive("/profile") ? "text-red-600 font-semibold" : "hover:text-red-600"}`}
-              onClick={() => navigate("/profile")}
-            >
-              <FaUser />
-              <span>Tài khoản</span>
-            </button>
-          </li>
-          <hr className="text-gray-500" />
-          <li>
-            <button className="flex items-center gap-2 cursor-pointer hover:text-red-600" disabled>
-              <FaBell /> Thông báo
-            </button>
-          </li>
-          <hr className="text-gray-500" />
-        </ul>
-      </aside>
-
-
+      <SideBar />
       <main className="w-full p-4">
         {/* Title */}
         <h2 className="font-bold text-3xl mt-3 mb-5">Tài khoản</h2>

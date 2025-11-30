@@ -4,7 +4,7 @@ import { FaUser } from "react-icons/fa"
 import axios from "axios";
 
 
-const Navbar = ({ setSearchTerm, handleSearch, selectedGenre, setSelectedGenre, selectedCountry, setSelectedCountry, setSelectedType, genres, countries}) => {
+const Navbar = ({ setSearchTerm, handleSearch, selectedGenre, setSelectedGenre, selectedCountry, setSelectedCountry, setSelectedType, genres, countries }) => {
   const [userInfo, setUserInfo] = useState(null);
   const [openMenu, setOpenMenu] = useState(false);
   const [searchInput, setSearchInput] = useState("");

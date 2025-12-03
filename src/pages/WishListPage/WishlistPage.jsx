@@ -22,12 +22,12 @@ const WishlistPage = () => {
 
         const [movieRes, tvRes] = await Promise.all([
           axios.get(
-            `https://api.themoviedb.org/3/account/${user.id}/watchlist/movies?session_id=${session_id}`, {
+            `${import.meta.env.VITE_BASE}/account/${user.id}/watchlist/movies?session_id=${session_id}`, {
             signal: controller.signal,
             headers
           }),
           axios.get(
-            `https://api.themoviedb.org/3/account/${user.id}/watchlist/tv?session_id=${session_id}`, {
+            `${import.meta.env.VITE_BASE}/account/${user.id}/watchlist/tv?session_id=${session_id}`, {
             signal: controller.signal,
             headers
           }),]);
@@ -58,7 +58,7 @@ const WishlistPage = () => {
     fetchWishList();
     return () => controller.abort();
 
-  }, []);
+  }, [session_id, user.id]);
 
 
   if (loading) return <div>Loading ...</div>

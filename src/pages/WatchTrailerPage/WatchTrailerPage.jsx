@@ -14,14 +14,15 @@ const WatchTrailerPage = () => {
     useEffect(() => {
         const controller = new AbortController();
         const fetchTrailer = async () => {
-            try {
-                const headers = {
-                    Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-                    accept: "application/json",
-                };
 
+            const headers = {
+                Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
+                accept: "application/json",
+            };
+
+            try {
                 const res = await axios.get(
-                    `https://api.themoviedb.org/3/${media}/${id}/videos`, {
+                    `${import.meta.env.VITE_BASE}/${media}/${id}/videos`, {
                     signal: controller.signal,
                     headers
                 }

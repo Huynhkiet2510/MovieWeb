@@ -1,33 +1,41 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { FaStar, FaComment  } from "react-icons/fa";
+import { FaStar, FaComment } from "react-icons/fa";
 
 
 const Review = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
+    const controller = new AbortController();
     const fetchReview = async () => {
+
+      const headers = {
+        Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
+        accept: "application/json",
+      };
+
       try {
         const res = await axios.get(
-          `https://api.themoviedb.org/3/movie/${id}/reviews`,
+          `${import.meta.env.VITE_BASE}/movie/${id}/reviews`,
           {
-            headers: {
-              Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-              accept: "application/json",
-            },
+            headers,
+            signal: controller.signal,
           }
         );
         setReviews(res.data.results || []);
       } catch (error) {
+        if(axios.isCancel(error)) return;
         console.error("Lỗi khi lấy review:", error);
         setReviews([]);
       }
     };
 
-    fetchReview(); 
+    fetchReview();
+    return () => controller.abort();
+    
   }, [id]);
 
   return (
@@ -43,7 +51,6 @@ const Review = () => {
               key={review.id}
               className="bg-[#191B24] rounded-2xl p-4 shadow-md hover:shadow-lg transition-shadow duration-200"
             >
-              {/* Header */}
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold text-lg">
                   {review.author[0].toUpperCase()}
@@ -57,8 +64,6 @@ const Review = () => {
                   )}
                 </div>
               </div>
-
-              {/* Content */}
               <p className="text-gray-300 text-sm">
                 {review.content.length > 300
                   ? review.content.slice(0, 300) + "..."

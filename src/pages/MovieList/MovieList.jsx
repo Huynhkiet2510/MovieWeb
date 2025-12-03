@@ -10,6 +10,7 @@ const MovieList = () => {
     selectedGenre,
     selectedCountry,
     selectedType,
+    selectedCategory,
     genres,
     countries,
   } = useOutletContext();
@@ -20,54 +21,86 @@ const MovieList = () => {
   const [error, setError] = useState(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const type = selectedType || "tv";
   const page = Number(searchParams.get("page")) || 1;
 
-  // Build TMDB URL
-  const buildUrl = () => {
-    if (searchTerm)
-      return `https://api.themoviedb.org/3/search/${type}?query=${encodeURIComponent(
-        searchTerm
-      )}&page=${page}`;
+  const fetchCombined = async () => {
+    const isFilterActive = selectedGenre || selectedCountry || searchTerm || selectedCategory === "top-rated" || selectedCategory === "trending";
+    let urls = [];
 
-    if (selectedGenre)
-      return `https://api.themoviedb.org/3/discover/${type}?with_genres=${selectedGenre}&page=${page}`;
+    if (isFilterActive) {
+      if (searchTerm) {
+        urls = [
+          `${import.meta.env.VITE_BASE}/search/movie?query=${encodeURIComponent(searchTerm)}&page=${page}`,
+          `${import.meta.env.VITE_BASE}/search/tv?query=${encodeURIComponent(searchTerm)}&page=${page}`,
+        ];
+      } else if (selectedCountry || selectedGenre) {
+        urls = [
+          `${import.meta.env.VITE_BASE}/discover/movie?${selectedGenre ? `with_genres=${selectedGenre}&` : ""}${selectedCountry ? `with_origin_country=${selectedCountry}&` : ""}page=${page}`,
+          `${import.meta.env.VITE_BASE}/discover/tv?${selectedGenre ? `with_genres=${selectedGenre}&` : ""}${selectedCountry ? `with_origin_country=${selectedCountry}&` : ""}page=${page}`,
+        ];
+      } else if (selectedCategory === "trending") {
+        urls = [
+          `${import.meta.env.VITE_BASE}/trending/movie/day?page=${page}`,
+          `${import.meta.env.VITE_BASE}/trending/tv/day?page=${page}`,
+        ];
+      }
+      else if (selectedCategory === "top-rated") {
+        urls = [
+          `${import.meta.env.VITE_BASE}/movie/top_rated?page=${page}`,
+          `${import.meta.env.VITE_BASE}/tv/top_rated?page=${page}`,
+        ];
+      }
 
-    if (selectedCountry)
-      return `https://api.themoviedb.org/3/discover/${type}?with_origin_country=${selectedCountry}&page=${page}`;
+      const [moviesRes, tvRes] = await Promise.all(
+        urls.map((url) =>
+          axios.get(url, { headers: { Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}` } })
+        )
+      );
 
-    if (type === "tv") return `https://api.themoviedb.org/3/tv/popular?page=${page}`;
-    return `https://api.themoviedb.org/3/movie/popular?page=${page}`;
+      const combined = [
+        ...moviesRes.data.results.map((item) => ({ ...item, media_type: "movie" })),
+        ...tvRes.data.results.map((item) => ({ ...item, media_type: "tv" })),
+      ];
+
+      combined.sort((a, b) => b.popularity - a.popularity);
+
+      return {
+        results: combined,
+        totalPages: Math.max(moviesRes.data.total_pages, tvRes.data.total_pages),
+      };
+    } else {
+      const url = selectedType === "tv"
+        ? `${import.meta.env.VITE_BASE}/tv/popular?page=${page}`
+        : `${import.meta.env.VITE_BASE}/movie/popular?page=${page}`;
+
+      const res = await axios.get(url, {
+        headers: { Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}` },
+      });
+
+      const results = res.data.results.map((item) => ({
+        ...item,
+        media_type: selectedType,
+      }));
+
+      return {
+        results,
+        totalPages: res.data.total_pages || 1,
+      };
+    }
   };
 
   useEffect(() => {
-    const url = buildUrl();
     const controller = new AbortController();
-
-    const fetchMovies = async () => {
+    const fetchData = async () => {
       setLoading(true);
       setError(null);
-
       try {
-        const res = await axios.get(url, {
-          signal: controller.signal,
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-            accept: "application/json",
-          },
-        });
-
-        // Gắn media_type để UI phân biệt Movie/TV
-        const results = res.data.results.map((item) => ({
-          ...item,
-          media_type: item.media_type || (url.includes("/tv") ? "tv" : "movie"),
-        }));
-
-        setListMovie(results);
-        setTotalPages(res.data.total_pages || 1);
-      } catch (err) {
-        if (axios.isCancel(err)) return;
-        setError(err);
+        const res = await fetchCombined();
+        setListMovie(res.results);
+        setTotalPages(res.totalPages);
+      } catch (error) {
+        if (axios.isCancel(error)) return;
+        setError(error);
         setListMovie([]);
         setTotalPages(1);
       } finally {
@@ -75,42 +108,38 @@ const MovieList = () => {
       }
     };
 
-    fetchMovies();
+    fetchData();
     return () => controller.abort();
-  }, [searchTerm, selectedGenre, selectedCountry, selectedType, page]);
+    
+  }, [searchTerm, selectedGenre, selectedCountry, selectedType, selectedCategory, page]);
 
-  // Scroll lên đầu trang khi đổi page hoặc filter
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [page, selectedGenre, selectedCountry, selectedType]);
+  }, [page, searchTerm, selectedGenre, selectedCountry, selectedType]);
 
   const handlePageChange = (newPage) => {
     setSearchParams({ page: newPage });
   };
 
-  // Title động
   const genreName = genres.find((g) => g.id == selectedGenre)?.name;
   const countryName = countries.find((c) => c.iso_3166_1 === selectedCountry)?.english_name;
 
-  let title = "Danh sách phim nổi bật";
-  if (genreName) title = `Phim ${genreName}`;
+  let title = "";
+  if (searchTerm) title = `Kết quả tìm kiếm: "${searchTerm}"`;
+  else if (genreName && countryName) title = `Phim ${genreName} - ${countryName}`;
+  else if (genreName) title = `Phim ${genreName}`;
   else if (countryName) title = `Phim ${countryName}`;
-  else if (type === "tv") title = "Phim bộ";
-  else if (type === "movie") title = "Phim lẻ";
+  else if (selectedType === "tv") title = "Phim bộ";
+  else if (selectedType === "movie") title = "Phim lẻ";
+  else if (selectedCategory === "trending") title = "Phim xu hướng";
+  else if (selectedCategory === "top-rated") title = "Phim nổi bật";
+
+  if (loading) return <div className="text-gray-400 p-10 text-center">Đang tải phim...</div>
+  if (error) return <div className="text-red-500 p-10 text-center">Không thể tải dữ liệu. Vui lòng thử lại!</div>
 
   return (
     <div className="text-center">
       <h2 className="font-bold text-3xl tracking-tight mt-5">{title}</h2>
-
-      {loading && (
-        <p className="text-gray-400 p-10 text-center">Đang tải phim...</p>
-      )}
-
-      {error && (
-        <p className="text-red-500 p-10 text-center">
-          Không thể tải dữ liệu. Vui lòng thử lại!
-        </p>
-      )}
 
       {!loading && !error && (
         <div className="grid grid-cols-8 gap-6 p-6">
@@ -119,19 +148,13 @@ const MovieList = () => {
               Không có phim nào
             </p>
           ) : (
-            listMovie.map((item) => (
-              <CartItem key={item.id} item={item} />
-            ))
+            listMovie.map((item) => <CartItem key={`${item.media_type}-${item.id}`} item={item} />)
           )}
         </div>
       )}
 
       <div style={{ marginTop: "30px" }}>
-        <Pagination
-          page={page}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
+        <Pagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />
       </div>
     </div>
   );

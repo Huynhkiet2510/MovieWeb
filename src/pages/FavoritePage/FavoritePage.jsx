@@ -22,11 +22,11 @@ const FavoritePage = () => {
         };
 
         const [movieRes, tvRes] = await Promise.all([
-          axios.get(`https://api.themoviedb.org/3/account/${user.id}/favorite/movies?session_id=${session_id}`, {
+          axios.get(`${import.meta.env.VITE_BASE}/account/${user.id}/favorite/movies?session_id=${session_id}`, {
             signal: controller.signal,
             headers
           }),
-          axios.get(`https://api.themoviedb.org/3/account/${user.id}/favorite/tv?session_id=${session_id}`, {
+          axios.get(`${import.meta.env.VITE_BASE}/account/${user.id}/favorite/tv?session_id=${session_id}`, {
             signal: controller.signal,
             headers
           }),]);
@@ -57,7 +57,7 @@ const FavoritePage = () => {
     fetchFavoriteList();
     return () => controller.abort();
 
-  }, []);
+  }, [session_id, user.id]);
 
   if (loading) return <div>Loading ...</div>
   if (error) return <div className="text-red-500">Lỗi khi tải danh sách yêu thích!</div>

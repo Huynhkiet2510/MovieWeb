@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../store/authSlice";
 
 const AuthPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -14,7 +17,6 @@ const AuthPage = () => {
 
         const loginTMDB = async () => {
             try {
-                // 1. Tạo session
                 const sessionRes = await axios.post(
                     "https://api.themoviedb.org/3/authentication/session/new",
                     { request_token },
@@ -27,9 +29,7 @@ const AuthPage = () => {
                 );
 
                 const session_id = sessionRes.data.session_id;
-                localStorage.setItem("session_id", session_id);
 
-                // 2. Lấy thông tin người dùng
                 const accountRes = await axios.get(
                     `https://api.themoviedb.org/3/account?session_id=${session_id}`,
                     {
@@ -40,8 +40,9 @@ const AuthPage = () => {
                     }
                 );
 
-                const user = accountRes.data; 
-                localStorage.setItem("tmdb_user", JSON.stringify(user));
+                const user = accountRes.data;
+
+                dispatch(loginSuccess({ user, session_id }));
                 navigate("/");
 
             } catch (error) {
@@ -51,12 +52,7 @@ const AuthPage = () => {
 
         loginTMDB();
     }, []);
-
-    return (
-        <div style={{ textAlign: "center", marginTop: 100, color: "white" }}>
-            <h2>Đang xác thực đăng nhập...</h2>
-        </div>
-    );
 };
+
 
 export default AuthPage;

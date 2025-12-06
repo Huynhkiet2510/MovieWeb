@@ -19,15 +19,14 @@ const CartItem = ({ item }) => {
                 />
 
                 <h3 className="flex items-center truncate w-full p-2">
-                    <span className="mr-2">
+                    <span className="mr-2 ">
                         {item.media_type === "movie" ? (
                             <FaFilm className="text-yellow-300" />
                         ) : (
                             <FaTv className="text-blue-400" />
                         )}
-                    </span>
+                    </span >
                     {item.display_title || item.name || item.title}
-
                 </h3>
             </div>
         </div>

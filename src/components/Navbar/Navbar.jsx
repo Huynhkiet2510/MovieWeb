@@ -59,34 +59,34 @@ const Navbar = ({ setSearchTerm, selectedGenre, setSelectedCategory, setSelected
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleSearch = () => {
+    if (location.pathname !== "/") navigate("/");
+    setSearchTerm(searchInput); 
+    setSelectedGenre("");
+    setSelectedCountry("");
+    setSelectedType("");
+    setSelectedCategory("");
+  };
 
-  const goHomeAndSet = (setter, value) => {
+  const resetFilters = (setter, value) => {
     if (location.pathname !== "/") {
       navigate("/");
-      setTimeout(() => {
-        setter(value);
-        setSearchTerm("");
-        if (setter !== setSelectedGenre) setSelectedGenre("");
-        if (setter !== setSelectedCountry) setSelectedCountry("");
-        if (setter !== setSelectedType) setSelectedType("");
-        if (setter !== setSelectedCategory) setSelectedCategory("");
-      }, 100);
-    } else {
-      setter(value);
-      setSearchTerm("");
-      if (setter !== setSelectedGenre) setSelectedGenre("");
-      if (setter !== setSelectedCountry) setSelectedCountry("");
-      if (setter !== setSelectedType) setSelectedType("");
-      if (setter !== setSelectedCategory) setSelectedCategory("");
     }
+
+    setSearchTerm("");
+    setSearchInput("");
+    setter(value);
+    if (setter !== setSelectedGenre) setSelectedGenre("");
+    if (setter !== setSelectedCountry) setSelectedCountry("");
+    if (setter !== setSelectedType) setSelectedType("");
+    if (setter !== setSelectedCategory) setSelectedCategory("");
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      setSearchTerm(searchInput);
+     handleSearch();
     }
   };
-
 
   const genreOptions = useMemo(() =>
     genres.map(g => <option key={g.id} value={g.id}>{g.name}</option>),
@@ -98,11 +98,9 @@ const Navbar = ({ setSearchTerm, selectedGenre, setSelectedCategory, setSelected
     [countries]
   );
 
-
   return (
     <nav className="flex justify-between items-center bg-[#1f202a] text-white sticky top-0 z-[1000] p-4">
       <div onClick={() => navigate("/")} className="font-bold text-3xl tracking-tight cursor-pointer">MovieApp</div>
-
       <div>
         <input
           type="text"
@@ -112,12 +110,11 @@ const Navbar = ({ setSearchTerm, selectedGenre, setSelectedCategory, setSelected
           onChange={e => setSearchInput(e.target.value)}
           className="bg-[#545B68] rounded-tl-[5px] rounded-bl-[5px] px-[12px] py-[6px] text-white placeholder-white"
         />
-        <button onClick={() => setSearchTerm(searchInput)} className="bg-red-600 rounded-tr-[5px] rounded-br-[5px] px-[12px] py-[6px] ml-2 hover:bg-red-800 cursor-pointer transition-colors duration-200 ease-out">Tìm kiếm</button>
-
+        <button onClick={handleSearch} className="bg-red-600 rounded-tr-[5px] rounded-br-[5px] px-[12px] py-[6px] ml-2 hover:bg-red-800 cursor-pointer transition-colors duration-200 ease-out">Tìm kiếm</button>
       </div>
 
       <NavbarLinks
-        goHomeAndSet={goHomeAndSet}
+        resetFilters={resetFilters}
         setSelectedType={setSelectedType}
         setSelectedCategory={setSelectedCategory}
         selectedGenre={selectedGenre}

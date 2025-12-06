@@ -4,6 +4,7 @@ import MainContent from './MainContent';
 import { FaArrowLeft } from "react-icons/fa";
 import { useMovieActions } from "../../hooks/useMovieActions";
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const MovieDetail = () => {
   const { media, id } = useParams();
@@ -19,13 +20,14 @@ const MovieDetail = () => {
   const { isFavorite, isWatchList, toggleFavorite, toggleWatchList, setIsFavorite, setIsWatchList, cleanup } = useMovieActions({ media: selectedType, id });
 
 
-  const user = JSON.parse(localStorage.getItem("tmdb_user"));
-  const session_id = localStorage.getItem("session_id");
+  const user = useSelector(state => state.auth.user);
+  const session_id = useSelector(state => state.auth.session_id);
+
 
   useEffect(() => {
     const controller = new AbortController();
-
     const fetchDetail = async () => {
+
       try {
         const headers = {
           Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
@@ -73,11 +75,13 @@ const MovieDetail = () => {
 
     fetchDetail();
     return () => controller.abort();
+
   }, [id, selectedType]);
 
 
   useEffect(() => {
-    if (!movie || !user || !session_id) return;
+    if (!movie || !user?.id || !session_id) return;
+
     const controller = new AbortController();
     const fetchUserLists = async () => {
       try {
@@ -107,7 +111,7 @@ const MovieDetail = () => {
     fetchUserLists();
 
     return () => controller.abort();
-  }, [movie, user, session_id, id, selectedType]);
+  }, [movie, user?.id, session_id, selectedType]);
 
 
   useEffect(() => {
@@ -123,8 +127,8 @@ const MovieDetail = () => {
     else if (times.length > 1) duration = `${Math.min(...times)}–${Math.max(...times)} phút / tập`;
   }
 
-  if (!movie || loading) return <div>Đang tải ...</div>;
-  if (error) return <div className="text-red-500">Lỗi khi tải dữ liệu!</div>;
+  if (!movie || loading) return <div className="text-gray-400 p-10 text-center">Đang tải ...</div>;
+  if (error) return <div className="text-red-500 p-10 text-center">Lỗi khi tải dữ liệu!</div>;
 
   return (
     <div className="movie-detail">

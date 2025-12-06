@@ -3,6 +3,7 @@ import { FaStar } from "react-icons/fa";
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const Rating = () => {
     const [rating, setRating] = useState(0);
@@ -10,7 +11,7 @@ const Rating = () => {
     const { media, id } = useParams();
     const rateControllerRef = useRef(null);
 
-    const session_id = localStorage.getItem("session_id");
+    const session_id = useSelector(state => state.auth.session_id)
 
     useEffect(() => {
         const controller = new AbortController();

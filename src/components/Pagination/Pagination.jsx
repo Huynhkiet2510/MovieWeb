@@ -19,16 +19,15 @@ const Pagination = ({ page, totalPages, onPageChange }) => {
     return pages
   }
 
-  const btnBase = "w-10 h-10 flex items-center justify-center border border-gray-700 rounded transition-colors duration-200"
-  const navBtnBase = "px-4 py-2 border border-gray-700 rounded transition-colors duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+  const btnBase = "w-10 h-10 flex items-center justify-center border border-gray-700 rounded transition-colors duration-200 cursor-pointer"
+  const navBtnBase = "px-4 py-2 border border-gray-700 rounded transition-colors duration-200 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
 
   return (
     <div className="flex justify-center items-center gap-2 my-8 text-white">
-  
       <button
         disabled={page === 1}
         onClick={() => onPageChange(page - 1)}
-        className={`${navBtnBase} bg-gray-800 hover:bg-gray-700`}
+        className={`${navBtnBase} bg-gray-800 hover:bg-gray-700 `}
       >
         Trước
       </button>

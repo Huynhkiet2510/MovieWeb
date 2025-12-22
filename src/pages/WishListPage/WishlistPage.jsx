@@ -14,6 +14,7 @@ const WishListPage = () => {
 
   useEffect(() => {
     if (!user?.id || !session_id) return;
+
     const controller = new AbortController();
 
     const fetchWishList = async () => {

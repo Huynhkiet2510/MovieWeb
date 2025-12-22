@@ -3,7 +3,6 @@ import Layout from "./components/Layout/Layout";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import MovieListPage from "./pages/MovieList/MovieList";
 import MovieDetail from "./pages/MovieDetail/MovieDetail";
-import AuthPage from "./pages/AuthPage/AuthPage";
 import ProfilePage from "./pages/ProfilePage/AccountPage";
 import WishListPage from "./pages/WishListPage/WishListPage";
 import FavoritePage from "./pages/FavoritePage/FavoritePage";

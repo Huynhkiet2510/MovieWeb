@@ -9,6 +9,8 @@ import WishListPage from "./pages/WishListPage/WishListPage";
 import FavoritePage from "./pages/FavoritePage/FavoritePage";
 import WatchTrailerPage from "./pages/WatchTrailerPage/WatchTrailerPage";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
+import RequireAuth from "./routes/RequireAuth";
+import RequireGuest from "./routes/RequireGuest";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -29,15 +31,25 @@ function App() {
         pauseOnHover
       />
       <Routes>
-
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/login" element={
+          <RequireGuest>
+            <LoginPage />
+          </RequireGuest>} />
 
         <Route element={<Layout />} >
           <Route path="/" element={<MovieListPage />} />
-          <Route path="/favorite" element={<FavoritePage />} />
-          <Route path="/wishlist" element={<WishListPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/favorite" element={
+            <RequireAuth>
+              <FavoritePage />
+            </RequireAuth>} />
+          <Route path="/wishlist" element={
+            <RequireAuth>
+              <WishListPage />
+            </RequireAuth>} />
+          <Route path="/profile" element={
+            <RequireAuth>
+              <ProfilePage />
+            </RequireAuth>} />
           <Route path="/:media/:id" element={<MovieDetail />} />
           <Route path="/watch/:media/:id" element={<WatchTrailerPage />} />
         </Route>

@@ -1,32 +1,67 @@
-import React from "react";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-
-
 const Pagination = ({ page, totalPages, onPageChange }) => {
+  const getPages = () => {
+    const pages = []
+    const delta = 2
+
+    const left = Math.max(2, page - delta)
+    const right = Math.min(totalPages - 1, page + delta)
+
+    pages.push(1)
+    if (left > 2) pages.push('...')
+
+    for (let i = left; i <= right; i++) {
+      pages.push(i)
+    }
+
+    if (right < totalPages - 1) pages.push('...')
+    if (totalPages > 1) pages.push(totalPages)
+
+    return pages
+  }
+
+  const btnBase = "w-10 h-10 flex items-center justify-center border border-gray-700 rounded transition-colors duration-200"
+  const navBtnBase = "px-4 py-2 border border-gray-700 rounded transition-colors duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+
   return (
-<div className="flex items-center justify-center gap-4 mt-6">
+    <div className="flex justify-center items-center gap-2 my-8 text-white">
+  
+      <button
+        disabled={page === 1}
+        onClick={() => onPageChange(page - 1)}
+        className={`${navBtnBase} bg-gray-800 hover:bg-gray-700`}
+      >
+        Trước
+      </button>
 
-  <button
-    disabled={page === 1}
-    onClick={() => onPageChange(page - 1)}
-    className={`flex items-center justify-center w-10 h-10 rounded-full bg-[#2B2C38] text-white hover:bg-[#111] cursor-pointer transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed`}
-  >
-    <FaAngleLeft />
-  </button>
+      {getPages().map((p, index) =>
+        p === '...' ? (
+          <span key={index} className="px-2 text-gray-500">
+            ...
+          </span>
+        ) : (
+          <button
+            key={index}
+            onClick={() => onPageChange(p)}
+            className={`${btnBase} ${
+              p === page 
+                ? 'bg-red-600 border-red-600 text-white'
+                : 'bg-gray-800 border-gray-700 hover:bg-gray-600 text-gray-300'
+            }`}
+          >
+            {p}
+          </button>
+        )
+      )}
 
-  <span className="px-3 py-2 rounded-lg bg-[#2B2C38] text-white font-semibold">
-    Trang <strong>{page}</strong> / {totalPages}
-  </span>
+      <button
+        disabled={page === totalPages}
+        onClick={() => onPageChange(page + 1)}
+        className={`${navBtnBase} bg-gray-800 hover:bg-gray-700`}
+      >
+        Sau
+      </button>
+    </div>
+  )
+}
 
-  <button
-    disabled={page === totalPages}
-    onClick={() => onPageChange(page + 1)}
-    className={`flex items-center justify-center w-10 h-10 rounded-full bg-[#2B2C38] text-white hover:bg-[#111] cursor-pointer transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed`}
-  >
-    <FaAngleRight />
-  </button>
-</div>
-  );
-};
-
-export default Pagination;
+export default Pagination

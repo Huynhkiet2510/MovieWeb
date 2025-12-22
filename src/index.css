@@ -3,4 +3,5 @@
 html, body, #root {
   background-color: #191B24;
   color: white;
+  scrollbar-gutter: stable;
 }

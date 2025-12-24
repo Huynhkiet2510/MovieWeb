@@ -3,6 +3,7 @@ import { useOutletContext, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import Pagination from "../../components/Pagination/Pagination";
 import CartItem from "../../components/CartItem/CartItem";
+import MovieSkeleton from "../../components/MovieSkeleton/MovieSkeleton";
 
 const MovieList = () => {
   const {
@@ -110,7 +111,7 @@ const MovieList = () => {
 
     fetchData();
     return () => controller.abort();
-    
+
   }, [searchTerm, selectedGenre, selectedCountry, selectedType, selectedCategory, page]);
 
   useEffect(() => {
@@ -134,26 +135,32 @@ const MovieList = () => {
   else if (selectedCategory === "trending") title = "Phim xu hướng";
   else if (selectedCategory === "top-rated") title = "Phim nổi bật";
 
-  if (loading) return <div className="text-gray-400 p-10 text-center">Đang tải phim...</div>
-  if (error) return <div className="text-red-500 p-10 text-center">Không thể tải dữ liệu. Vui lòng thử lại!</div>
-
   return (
-    <div className="text-center">
+    <div className="text-center min-h-screen">
       <h2 className="font-bold text-3xl tracking-tight mt-5">{title}</h2>
-
-      {!loading && !error && (
-        <div className="grid grid-cols-8 gap-6 p-6">
-          {listMovie.length === 0 ? (
-            <p className="col-span-8 bg-[#14161D] w-80 text-center p-10 mt-8 mx-auto rounded-2xl text-sm text-gray-400">
-              Không có phim nào
-            </p>
-          ) : (
-            listMovie.map((item) => <CartItem key={`${item.media_type}-${item.id}`} item={item} />)
-          )}
-        </div>
-      )}
-
-      <div style={{ marginTop: "30px" }}>
+      <div className="grid grid-cols-8 gap-6 p-6">
+        {loading
+          ? Array(16).fill(0).map((_, i) => <MovieSkeleton key={i} />)
+          : error
+            ? (
+              <p className="col-span-8 text-red-500 text-center">
+                Không thể tải dữ liệu. Vui lòng thử lại!
+              </p>
+            )
+            : listMovie.length === 0
+              ? (
+                <p className="col-span-8 bg-[#14161D] w-80 text-center p-10 mt-8 mx-auto rounded-2xl text-sm text-gray-400">
+                  Không có phim nào
+                </p>
+              )
+              : (
+                listMovie.map(item => (
+                  <CartItem key={`${item.media_type}-${item.id}`} item={item} />
+                ))
+              )
+        }
+      </div>
+      <div className="mt-2 min-h-[30px]">
         <Pagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />
       </div>
     </div>

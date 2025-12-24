@@ -9,7 +9,7 @@ const SideBar = () => {
     const isActive = (path) => location.pathname === path;
 
     return (
-        <aside className="bg-[#25272F] w-[350px] h-[705px] p-10 m-5 rounded-2xl">
+        <aside className="bg-[#25272F] w-[350px] h-[630px] p-10 m-5 rounded-2xl">
             <h2 className="font-bold text-lg mb-8">Quản Lý Tài Khoản</h2>
             <ul className="space-y-4">
                 <li>

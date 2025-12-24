@@ -16,8 +16,7 @@ const AccountPage = () => {
   return (
     <div className="flex min-h-screen">
       <SideBar />
-      <main className="w-full p-4">
-        {/* Title */}
+      <main className="flex-1 w-full p-4">
         <h2 className="font-bold text-3xl mt-3 mb-5">Tài khoản</h2>
         <p className="text-gray-400 mb-10">Cập nhật thông tin tài khoản</p>
 

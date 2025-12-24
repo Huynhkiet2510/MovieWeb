@@ -4,52 +4,63 @@ import NavbarUserMenu from "./NavbarUserMenu";
 import { useMemo } from "react";
 import axios from "axios";
 import NavbarLinks from "./NavbarLinks";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading , logout} from "../../store/authSlice"
 
 
 const Navbar = ({ setSearchTerm, selectedGenre, setSelectedCategory, setSelectedGenre, selectedCountry, setSelectedCountry, setSelectedType, genres, countries }) => {
-  const [userInfo, setUserInfo] = useState(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { session_id, authLoading, user } = useSelector((state) => state.auth);
+
+  const [userInfo, setUserInfo] = useState(user);
   const [openMenu, setOpenMenu] = useState(false);
   const [searchInput, setSearchInput] = useState("");
 
-  const navigate = useNavigate();
-  const location = useLocation();
   const menuRef = useRef();
   const controllerRef = useRef(null);
-  const session_id = localStorage.getItem("session_id");
 
   useEffect(() => {
-    if (!session_id) return;
 
-    controllerRef.current?.abort();
-    const controller = new AbortController();
-    controllerRef.current = controller;
+    if (!session_id) {
+      dispatch(setLoading(false));
+    } else {
 
-    const fetchUser = async () => {
+      controllerRef.current?.abort();
+      const controller = new AbortController();
+      controllerRef.current = controller;
 
-      const headers = {
-        Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-        accept: "application/json",
+      const fetchUser = async () => {
+
+        const headers = {
+          Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
+          accept: "application/json",
+        };
+
+        try {
+          const res = await axios.get(
+            `${import.meta.env.VITE_BASE}/account?session_id=${session_id}`,
+            {
+              headers,
+              signal: controller.signal,
+            }
+          );
+          setUserInfo(res.data);
+        } catch (error) {
+          if (axios.isCancel(error)) return;
+          console.error(error);
+        }
       };
 
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BASE}/account?session_id=${session_id}`,
-          {
-            headers,
-            signal: controller.signal,
-          }
-        );
-        setUserInfo(res.data);
-      } catch (error) {
-        if (axios.isCancel(error)) return;
-        console.error(error);
-      }
-    };
-
-    fetchUser();
-    return () => controller.abort();
-
+      fetchUser();
+      return () => controller.abort();
+    }
   }, [session_id]);
+
+  useEffect(() => {
+    setUserInfo(user);
+  }, [user]);
 
   useEffect(() => {
     const handleClickOutside = e => {
@@ -61,7 +72,7 @@ const Navbar = ({ setSearchTerm, selectedGenre, setSelectedCategory, setSelected
 
   const handleSearch = () => {
     if (location.pathname !== "/") navigate("/");
-    setSearchTerm(searchInput); 
+    setSearchTerm(searchInput);
     setSelectedGenre("");
     setSelectedCountry("");
     setSelectedType("");
@@ -84,7 +95,7 @@ const Navbar = ({ setSearchTerm, selectedGenre, setSelectedCategory, setSelected
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-     handleSearch();
+      handleSearch();
     }
   };
 
@@ -132,6 +143,8 @@ const Navbar = ({ setSearchTerm, selectedGenre, setSelectedCategory, setSelected
         setOpenMenu={setOpenMenu}
         setUserInfo={setUserInfo}
         navigate={navigate}
+        authLoading={authLoading}
+        logout={logout}
       />
     </nav>
   );

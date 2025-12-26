@@ -1,7 +1,7 @@
 import { FaUser } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 
-const NavbarUserMenu = ({ userInfo, menuRef, openMenu, setOpenMenu, setUserInfo, navigate, authLoading, logout }) => {
+const NavbarUserMenu = ({ userInfo, menuRef, openMenu, setOpenMenu, setUserInfo, navigate, logout }) => {
     const dispatch = useDispatch();
 
     const handleLogout = () => {
@@ -50,6 +50,7 @@ const NavbarUserMenu = ({ userInfo, menuRef, openMenu, setOpenMenu, setUserInfo,
                             { label: "Yêu Thích", path: "/favorite" },
                             { label: "Danh Sách", path: "/wishlist" },
                             { label: "Tài Khoản", path: "/profile" },
+                            { label: "Thông báo", path: "/notification" },
                         ].map((item) => (
                             <div
                                 key={item.path}

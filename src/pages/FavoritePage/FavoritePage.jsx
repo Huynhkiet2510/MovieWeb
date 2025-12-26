@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CartItem from "../../components/CartItem/CartItem";
 import SideBar from "../../components/SideBar/SideBar";
+import getFavoriteMulti from "../../services/FavoriteApi"
 import MovieSkeleton from "../../components/MovieSkeleton/MovieSkeleton";
 
 const FavoritePage = () => {
@@ -23,21 +24,11 @@ const FavoritePage = () => {
         setLoading(true);
         setError(null);
 
-        const headers = {
-          Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-          accept: "application/json",
-        };
-
-        const [movieRes, tvRes] = await Promise.all([
-          axios.get(
-            `${import.meta.env.VITE_BASE}/account/${user.id}/favorite/movies?session_id=${session_id}`,
-            { signal: controller.signal, headers }
-          ),
-          axios.get(
-            `${import.meta.env.VITE_BASE}/account/${user.id}/favorite/tv?session_id=${session_id}`,
-            { signal: controller.signal, headers }
-          ),
-        ]);
+        const [movieRes, tvRes] = await getFavoriteMulti(
+          user.id,
+          session_id,
+          { signal: controller.signal }
+        )
 
         const merged = [
           ...movieRes.data.results.map(item => ({
@@ -54,10 +45,9 @@ const FavoritePage = () => {
 
         setFavoriteList(merged);
       } catch (err) {
-        if (!axios.isCancel(err)) {
-          console.error(err);
-          setError(err);
-        }
+        if (err.name === "CanceledError" || axios.isCancel(err)) return;
+        console.error(err);
+        setError(err);
       } finally {
         setLoading(false);
       }
@@ -65,6 +55,7 @@ const FavoritePage = () => {
 
     fetchFavoriteList();
     return () => controller.abort();
+
   }, [user?.id, session_id]);
 
   return (

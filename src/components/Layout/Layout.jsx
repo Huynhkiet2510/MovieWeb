@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
+import { getGenreAndCountry } from "../../services/GenreAndCountryApi"
 import { Outlet } from "react-router-dom";
 
 const Layout = () => {
@@ -17,21 +18,12 @@ const Layout = () => {
     const controller = new AbortController();
 
     const fetchData = async () => {
-      const headers = {
-        Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-        accept: "application/json",
-      };
 
       try {
-        const [genreRes, countryRes] = await Promise.all([
-          axios.get("https://api.themoviedb.org/3/genre/movie/list", {
-            headers, signal: controller.signal
-          }),
 
-          axios.get("https://api.themoviedb.org/3/configuration/countries", {
-            headers, signal: controller.signal
-          })
-        ]);
+        const [genreRes, countryRes] = await getGenreAndCountry({
+          signal: controller.signal,
+        });
 
         setGenres(genreRes.data.genres || []);
         setCountries(countryRes.data || []);

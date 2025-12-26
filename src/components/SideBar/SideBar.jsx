@@ -46,7 +46,9 @@ const SideBar = () => {
                 </li>
                 <hr className="text-gray-500" />
                 <li>
-                    <button className="flex items-center gap-2 cursor-pointer hover:text-red-600" disabled>
+                    <button  className={`flex items-center gap-2 cursor-pointer transition-colors duration-200 
+              ${isActive("/notification") ? "text-red-600 font-semibold" : "hover:text-red-600"}`}
+                        onClick={() => navigate("/notification")}>
                         <FaBell /> Thông báo
                     </button>
                 </li>

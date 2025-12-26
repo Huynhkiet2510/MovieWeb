@@ -8,16 +8,15 @@ import ProfilePage from "./pages/ProfilePage/AccountPage";
 import WishListPage from "./pages/WishListPage/WishListPage";
 import FavoritePage from "./pages/FavoritePage/FavoritePage";
 import WatchTrailerPage from "./pages/WatchTrailerPage/WatchTrailerPage";
-import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import RequireAuth from "./routes/RequireAuth";
 import RequireGuest from "./routes/RequireGuest";
+import NotificationPage from "./pages/NotificationPage/NotificationPage";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <Router>
-      <ScrollToTop />
       <ToastContainer
         position="top-right"
         style={{ top: '50px', right: '20px' }}
@@ -49,6 +48,10 @@ function App() {
           <Route path="/wishlist" element={
             <RequireAuth>
               <WishListPage />
+            </RequireAuth>} />
+          <Route path="/notification" element={
+            <RequireAuth>
+              <NotificationPage />
             </RequireAuth>} />
           <Route path="/profile" element={
             <RequireAuth>

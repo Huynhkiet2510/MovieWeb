@@ -3,56 +3,49 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../store/authSlice";
+import { createSession, getAccount } from "../../services/AuthApi";
 
 const AuthPage = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const request_token = params.get("request_token");
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const request_token = params.get("request_token");
+    const controller = new AbortController();
 
-        if (!request_token) return;
+    if (!request_token) return;
 
-        const loginTMDB = async () => {
-            try {
-                const sessionRes = await axios.post(
-                    "https://api.themoviedb.org/3/authentication/session/new",
-                    { request_token },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-                            accept: "application/json",
-                        },
-                    }
-                );
+    const loginTMDB = async () => {
+      try {
+        const sessionRes = await createSession(request_token, {
+          signal: controller.signal,
+        });
 
-                const session_id = sessionRes.data.session_id;
+        const session_id = sessionRes.data.session_id;
 
-                const accountRes = await axios.get(
-                    `https://api.themoviedb.org/3/account?session_id=${session_id}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-                            accept: "application/json",
-                        },
-                    }
-                );
+        const accountRes = await getAccount(session_id, {
+          signal: controller.signal,
+        });
 
-                const user = accountRes.data;
+        dispatch(loginSuccess({
+          user: accountRes.data,
+          session_id,
+        }));
 
-                dispatch(loginSuccess({ user, session_id }));
-                navigate("/");
+        navigate("/", { replace: true });
+      } catch (err) {
+        if (axios.isCancel(err)) return;
+        console.error("Lỗi login TMDB:", err);
+      }
+    };
 
-            } catch (error) {
-                console.error("Lỗi login TMDB:", error);
-            }
-        };
+    loginTMDB();
+    return () => controller.abort();
+  }, [location.search, dispatch, navigate]);
 
-        loginTMDB();
-    }, []);
+  return null;
 };
-
 
 export default AuthPage;

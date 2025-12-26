@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import CartItem from "../../components/CartItem/CartItem";
 import SideBar from "../../components/SideBar/SideBar";
 import MovieSkeleton from "../../components/MovieSkeleton/MovieSkeleton";
+import getWishlistMulti from "../../services/WishListApi"
 import axios from "axios";
 
 const WishListPage = () => {
@@ -23,21 +24,11 @@ const WishListPage = () => {
         setLoading(true);
         setError(null);
 
-        const headers = {
-          Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-          accept: "application/json",
-        };
-
-        const [movieRes, tvRes] = await Promise.all([
-          axios.get(
-            `${import.meta.env.VITE_BASE}/account/${user.id}/watchlist/movies?session_id=${session_id}`,
-            { signal: controller.signal, headers }
-          ),
-          axios.get(
-            `${import.meta.env.VITE_BASE}/account/${user.id}/watchlist/tv?session_id=${session_id}`,
-            { signal: controller.signal, headers }
-          ),
-        ]);
+        const [movieRes, tvRes] = await getWishlistMulti(
+          user.id,
+          session_id,
+          { signal: controller.signal }
+        );
 
         const merged = [
           ...movieRes.data.results.map(item => ({
@@ -66,6 +57,8 @@ const WishListPage = () => {
     fetchWishList();
     return () => controller.abort();
   }, [user?.id, session_id]);
+
+
 
   return (
     <div className="flex min-h-screen">

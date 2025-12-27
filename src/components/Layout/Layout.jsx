@@ -53,7 +53,7 @@ const Layout = () => {
         countries={countries}
       />
 
-      <div className="flex-1 mb-10">
+      <main className="flex-1 mb-8">
         <Outlet
           context={{
             searchTerm,
@@ -62,8 +62,8 @@ const Layout = () => {
             countries,
           }}
         />
-      </div>
-      <Footer />
+      </main>
+      <Footer  />
     </div>
   );
 };

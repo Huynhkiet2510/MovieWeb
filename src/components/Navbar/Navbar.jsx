@@ -1,151 +1,171 @@
-import { useEffect, useState, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import NavbarUserMenu from "./NavbarUserMenu";
 import { useMemo } from "react";
-import axios from "axios";
+import { useSelector } from "react-redux";
+import { logout } from "../../store/authSlice";
+import { useFilter } from "./useFilter";
+import { useClickOutside } from "./useClickOutside";
+import { useSearch } from "./useSearch";
+import { FaBars, FaTimes } from "react-icons/fa";
+import NavbarUserMenu from "./NavbarUserMenu";
 import NavbarLinks from "./NavbarLinks";
-import { useDispatch, useSelector } from "react-redux";
-import { setLoading , logout} from "../../store/authSlice"
 
+const Navbar = () => {
+  const { authLoading, user } = useSelector((state) => state.auth);
 
-const Navbar = ({ setSearchTerm, selectedGenre, setSelectedCategory, setSelectedGenre, selectedCountry, setSelectedCountry, setSelectedType, genres, countries }) => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const { session_id, authLoading, user } = useSelector((state) => state.auth);
+  const { searchInput, handleInputChange, setSearchInput, handleSearch, handleKeyDown } = useSearch();
 
-  const [userInfo, setUserInfo] = useState(user);
-  const [openMenu, setOpenMenu] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
+  const {
+    resetFilters,
+    openMenu,
+    setOpenMenu,
+    openMobileMenu,
+    setOpenMobileMenu,
+    navigate,
+    metadata,
+  } = useFilter();
 
-  const menuRef = useRef();
-  const controllerRef = useRef(null);
+  const navRef = useClickOutside(() => {
+    setOpenMenu(false);
+    setOpenMobileMenu(false);
+  });
 
-  useEffect(() => {
+  const genreOptions = useMemo(
+    () =>
+      metadata.genres.map((g) => (
+        <option key={g.id} value={g.id}>
+          {g.name}
+        </option>
+      )),
+    [metadata.genres]
+  );
 
-    if (!session_id) {
-      dispatch(setLoading(false));
-    } else {
+  const countryOptions = useMemo(
+    () =>
+      metadata.countries.map((c) => (
+        <option key={c.iso_3166_1} value={c.iso_3166_1}>
+          {c.english_name}
+        </option>
+      )),
+    [metadata.countries]
+  );
 
-      controllerRef.current?.abort();
-      const controller = new AbortController();
-      controllerRef.current = controller;
-
-      const fetchUser = async () => {
-
-        const headers = {
-          Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-          accept: "application/json",
-        };
-
-        try {
-          const res = await axios.get(
-            `${import.meta.env.VITE_BASE}/account?session_id=${session_id}`,
-            {
-              headers,
-              signal: controller.signal,
-            }
-          );
-          setUserInfo(res.data);
-        } catch (error) {
-          if (axios.isCancel(error)) return;
-          console.error(error);
-        }
-      };
-
-      fetchUser();
-      return () => controller.abort();
-    }
-  }, [session_id]);
-
-  useEffect(() => {
-    setUserInfo(user);
-  }, [user]);
-
-  useEffect(() => {
-    const handleClickOutside = e => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) setOpenMenu(false);
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleSearch = () => {
-    if (location.pathname !== "/") navigate("/");
-    setSearchTerm(searchInput);
-    setSelectedGenre("");
-    setSelectedCountry("");
-    setSelectedType("");
-    setSelectedCategory("");
+  const linkProps = {
+    genreOptions,
+    countryOptions,
+    selectedGenre: metadata.selectedGenre,
+    selectedCountry: metadata.selectedCountry,
+    setSelectedGenre: metadata.setSelectedGenre,
+    setSelectedCountry: metadata.setSelectedCountry,
+    setSelectedType: metadata.setSelectedType,
+    setSelectedCategory: metadata.setSelectedCategory,
   };
 
-  const resetFilters = (setter, value) => {
-    if (location.pathname !== "/") {
+  const handleLogoClick = () => {
+
+    setOpenMenu(false);
+    setOpenMobileMenu(false);
+
+    metadata.setSelectedType("");
+    metadata.setSelectedGenre("");
+    metadata.setSelectedCountry("");
+    metadata.setSelectedCategory("top-rated");
+    metadata.setSearchTerm("");
+
+    setSearchInput("");
+
+    if (window.location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
       navigate("/");
     }
-
-    setSearchTerm("");
-    setSearchInput("");
-    setter(value);
-    if (setter !== setSelectedGenre) setSelectedGenre("");
-    if (setter !== setSelectedCountry) setSelectedCountry("");
-    if (setter !== setSelectedType) setSelectedType("");
-    if (setter !== setSelectedCategory) setSelectedCategory("");
   };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
-
-  const genreOptions = useMemo(() =>
-    genres.map(g => <option key={g.id} value={g.id}>{g.name}</option>),
-    [genres]
-  );
-
-  const countryOptions = useMemo(() =>
-    countries.map(c => (<option key={c.iso_3166_1} value={c.iso_3166_1}>{c.english_name}</option>)),
-    [countries]
-  );
 
   return (
-    <nav className="flex justify-between items-center bg-[#1f202a] text-white sticky top-0 z-[1000] p-4">
-      <div onClick={() => navigate("/")} className="font-bold text-3xl tracking-tight cursor-pointer">MovieApp</div>
-      <div>
-        <input
-          type="text"
-          placeholder="Nhập tên phim..."
-          value={searchInput}
-          onKeyDown={handleKeyDown}
-          onChange={e => setSearchInput(e.target.value)}
-          className="bg-[#545B68] rounded-tl-[5px] rounded-bl-[5px] px-[12px] py-[6px] text-white placeholder-white"
-        />
-        <button onClick={handleSearch} className="bg-red-600 rounded-tr-[5px] rounded-br-[5px] px-[12px] py-[6px] ml-2 hover:bg-red-800 cursor-pointer transition-colors duration-200 ease-out">Tìm kiếm</button>
+    <nav ref={navRef} className="bg-[#1f202a] text-white sticky top-0 z-[1000] shadow-xl">
+      <div className="max-w-[1440px] mx-auto px-4 py-3 flex justify-between items-center gap-4">
+        <div
+          onClick={handleLogoClick}
+          className="font-bold text-2xl md:text-3xl tracking-tighter cursor-pointer text-red-600 shrink-0 hover:opacity-80"
+        >
+          MovieApp
+        </div>
+
+        <div className="hidden sm:flex flex-1 max-w-[300px] lg:max-w-md items-center group">
+          <input
+            type="text"
+            placeholder="Tìm phim..."
+            value={searchInput}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="w-full bg-[#2b2d35] border border-transparent focus:border-red-600 rounded-l-md px-4 py-2 outline-none transition-all text-sm"
+          />
+          <button
+            onClick={handleSearch}
+            className="bg-red-600 ml-2 px-5 py-2 rounded-r-md hover:bg-red-700 transition-colors font-medium text-sm"
+          >
+            Tìm
+          </button>
+        </div>
+
+        <div className="flex items-center gap-3">
+
+          <div className="hidden lg:block">
+            <NavbarLinks resetFilters={resetFilters} {...linkProps} />
+          </div>
+
+          <button
+            className={`lg:hidden text-lg p-2 rounded-md transition-all ${openMobileMenu ? "bg-red-600" : "hover:bg-gray-700"
+              }`}
+            onClick={() => setOpenMobileMenu(!openMobileMenu)}
+          >
+            {openMobileMenu ? <FaTimes /> : <FaBars />}
+          </button>
+
+          <NavbarUserMenu
+            userInfo={user}
+            menuRef={null}
+            openMenu={openMenu}
+            setOpenMenu={setOpenMenu}
+            navigate={navigate}
+            authLoading={authLoading}
+            logout={logout}
+          />
+
+        </div>
       </div>
 
-      <NavbarLinks
-        resetFilters={resetFilters}
-        setSelectedType={setSelectedType}
-        setSelectedCategory={setSelectedCategory}
-        selectedGenre={selectedGenre}
-        genreOptions={genreOptions}
-        setSelectedGenre={setSelectedGenre}
-        selectedCountry={selectedCountry}
-        setSelectedCountry={setSelectedCountry}
-        countryOptions={countryOptions}
-      />
+      <div className={`
+        lg:hidden overflow-hidden transition-all duration-300 ease-in-out bg-[#23242f] 
+        ${openMobileMenu ? "max-h-[500px] border-t border-gray-700" : "max-h-0"}
+      `}>
+        <div className="p-5">
+          <NavbarLinks
+            {...linkProps}
+            resetFilters={(setter, val) => {
+              resetFilters(setter, val);
+              setOpenMobileMenu(false);
+            }}
+          />
+        </div>
+      </div>
 
-      <NavbarUserMenu
-        userInfo={userInfo}
-        menuRef={menuRef}
-        openMenu={openMenu}
-        setOpenMenu={setOpenMenu}
-        setUserInfo={setUserInfo}
-        navigate={navigate}
-        authLoading={authLoading}
-        logout={logout}
-      />
+      <div className="sm:hidden px-4 pb-3">
+        <div className="flex shadow-lg">
+          <input
+            type="text"
+            className="w-full bg-[#2b2d35] rounded-l-md px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-red-600"
+            placeholder="Nhập tên phim..."
+            value={searchInput}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
+          <button
+            onClick={handleSearch}
+            className="bg-red-600 px-4 rounded-r-md text-sm font-bold active:scale-95 transition-transform"
+          >
+            Tìm
+          </button>
+        </div>
+      </div>
     </nav>
   );
 };

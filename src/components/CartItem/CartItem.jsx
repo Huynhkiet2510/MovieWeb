@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaFilm, FaTv } from "react-icons/fa";
 
@@ -13,13 +13,14 @@ const CartItem = ({ item }) => {
         >
             <div className="rounded-2xl">
                 <img
-                    className="h-70"
-                    src={`https://image.tmdb.org/t/p/w200${item.poster_path}`}
+                    className="h-70 w-full"
+                    src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
                     alt={item.display_title}
+                    loading="lazy"
                 />
 
                 <h3 className="flex items-center w-full p-2">
-                    <span className="mr-2 ">
+                    <span className="mr-2">
                         {item.media_type === "movie" ? (
                             <FaFilm className="text-yellow-300" />
                         ) : (
@@ -33,4 +34,4 @@ const CartItem = ({ item }) => {
     )
 }
 
-export default CartItem
+export default memo(CartItem);

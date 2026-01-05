@@ -1,62 +1,40 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { FaStar, FaComment } from "react-icons/fa";
-import getReview from "../../services/ReviewApi"
 import Pagination from "../../components/Pagination/Pagination";
+import { useFetchReview } from "./useFetchReview"
 
-
-const Review = () => {
-  const { id } = useParams();
-  const [reviews, setReviews] = useState([]);
+const Review = ({ media, id }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [totalPages, setTotalPages] = useState(1);
-  const currentPage = Number(searchParams.get("page")) || 1;
+  const page = Number(searchParams.get("page")) || 1;
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    const fetchReview = async () => {
-      try {
-        const res = await getReview(id, {
-          params: { page: currentPage },
-          signal: controller.signal,
-        });
-
-        setReviews(res.data.results || []);
-        setTotalPages(res.data.total_pages || 1);
-      } catch (error) {
-        if (axios.isCancel(error)) return;
-        console.error("Lỗi khi lấy review:", error);
-        setReviews([]);
-      }
-    };
-
-    fetchReview();
-    return () => controller.abort();
-  }, [id, currentPage]);
-
+  const { reviews, totalPages, loading, error } = useFetchReview({ media, id, page });
 
   const handlePageChange = (newPage) => {
-    setSearchParams({ page: newPage });
+    setSearchParams({ page: newPage })
   };
 
   return (
     <div className="mt-8">
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4 flex items-center gap-2"><FaComment /> Đánh giá phim</h2>
-        {reviews.length === 0 ? (
+        {loading ? (
+          <>
+            <div className="bg-[#191B24] w-full h-32 animate-pulse rounded-2xl" />
+          </>
+        ) : error ? (
+          <p className="text-red-500 text-center">Lỗi tải đánh giá!</p>
+        ) : reviews.length === 0 ? (
           <p className="bg-[#14161D] w-full text-center p-10 rounded-2xl text-sm text-gray-400">Không có đánh giá nào.</p>
         ) : (
           <div className="flex flex-col gap-4">
             {reviews.map((review) => (
               <div
                 key={review.id}
-                className="bg-[#191B24] rounded-2xl p-4 shadow-md hover:shadow-lg transition-shadow duration-200"
+                className="bg-[#191B24] rounded-2xl  p-4 shadow-md hover:shadow-lg transition-shadow duration-200"
               >
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-white font-bold text-lg">
-                    {review.author[0].toUpperCase()}
+                    {(review.author?.charAt(0) || "U").toUpperCase()}
                   </div>
                   <div className="flex flex-col">
                     <h4 className="font-semibold text-white">{review.author}</h4>
@@ -80,9 +58,9 @@ const Review = () => {
 
       {reviews.length > 0 && (
         <Pagination
-          page={currentPage}
+          page={page}
           totalPages={totalPages}
-          handlePageChange={handlePageChange}
+          onPageChange={handlePageChange}
         />
       )}
 

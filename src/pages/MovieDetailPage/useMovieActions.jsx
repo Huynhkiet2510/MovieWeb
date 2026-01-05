@@ -1,13 +1,14 @@
 import { useRef, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 export const useMovieActions = ({ media, id }) => {
   const favControllerRef = useRef(null);
   const watchControllerRef = useRef(null);
 
-  const user = JSON.parse(localStorage.getItem("tmdb_user"));
-  const session_id = localStorage.getItem("session_id");
+  const user = useSelector(state => state.auth.user);
+  const session_id = useSelector(state => state.auth.session_id);
 
   const [isFavorite, setIsFavorite] = useState(false);
   const [isWatchList, setIsWatchList] = useState(false);

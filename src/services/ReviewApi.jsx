@@ -1,11 +1,7 @@
 import api from "../services/axiosClient";
 
-const getReview = (id, params = {}, config = {}) => {
-  return api.get(`/movie/${id}/reviews`,{
-    params: params,
-    ...config
-  } );
+const getReview = (mediaType, id, config = {}) => {
+  return api.get(`/${mediaType}/${id}/reviews`, config);
 };
-
 export default getReview;
 

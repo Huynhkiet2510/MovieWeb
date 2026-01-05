@@ -19,7 +19,6 @@ const WatchTrailerPage = () => {
         window.scrollTo(0, 0);
     }, []);
 
-
     useEffect(() => {
         const controller = new AbortController();
 
@@ -34,19 +33,20 @@ const WatchTrailerPage = () => {
                 });
 
                 const videos = res?.data?.results || [];
+                // Ưu tiên tìm video có type là Trailer, nếu không có lấy video đầu tiên
                 const trailer = videos.find(
                     (v) => v.type === "Trailer" && v.site === "YouTube"
-                );
+                ) || videos.find(v => v.site === "YouTube");
 
                 if (!trailer) {
                     setNoTrailer(true);
-                    return;
+                } else {
+                    setTrailerKey(trailer.key);
                 }
-
-                setTrailerKey(trailer.key);
             } catch (err) {
-                if (err.name === "CanceledError" || axios.isCancel(err)) return;
-                setError(err);
+                if (axios.isCancel(err)) return;
+                setError("Không thể tải trailer. Vui lòng thử lại!");
+                console.error("Fetch trailer error:", err);
             } finally {
                 setLoading(false);
             }
@@ -56,48 +56,39 @@ const WatchTrailerPage = () => {
         return () => controller.abort();
     }, [media, id]);
 
-    const handleBack = () => {
-        navigate(-1);
-    };
-
-    if (error) {
-        return (
-            <div className="min-h-screen bg-black flex items-center justify-center text-red-500 text-lg">
-                Không thể tải trailer. Vui lòng thử lại!
-            </div>
-        );
-    }
+    const handleBack = () => navigate(-1);
 
     return (
-        <div className="relative w-full h-screen flex justify-center items-center p-4">
+        <div className="relative w-full h-screen bg-black flex justify-center items-center p-4">
             <button
                 onClick={handleBack}
-                className="absolute top-6 left-6 flex items-center gap-2
-          bg-black hover:bg-[#1F202A] text-white
-          px-4 py-2 rounded-lg transition-all duration-200 cursor-pointer"
+                className="absolute top-6 left-6 z-10 flex items-center gap-2 
+                           bg-black/60 hover:bg-white/20 text-white 
+                           px-4 py-2 rounded-lg transition-all duration-200"
             >
                 <FaArrowLeft className="w-5 h-5" />
                 <span>Quay lại</span>
             </button>
 
-            {loading && <WatchTrailerSkeleton />}
-
-            {!loading && noTrailer && (
-                <p className="bg-[#14161D] w-80 text-center p-10 rounded-2xl text-sm text-gray-400">
-                    Không có trailer
-                </p>
+            {loading ? (
+                <WatchTrailerSkeleton />
+            ) : error ? (
+                <div className="text-red-500 text-lg">{error}</div>
+            ) : noTrailer ? (
+                <div className="bg-[#14161D] w-full max-w-md text-center p-10 rounded-2xl text-sm text-gray-400">
+                    <p>Rất tiếc, hiện tại không có trailer cho phim này.</p>
+                </div>
+            ) : (
+                <div className="w-full h-full max-w-6xl aspect-video">
+                    <iframe
+                        src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0`}
+                        title="Movie Trailer"
+                        className="w-full h-full rounded-xl shadow-2xl"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    />
+                </div>
             )}
-
-            {!loading && trailerKey && (
-                <iframe
-                    src={`https://www.youtube.com/embed/${trailerKey}`}
-                    title="Movie Trailer"
-                    className="w-full h-full max-w-5xl rounded-xl"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                />
-            )}
-
         </div>
     );
 };

@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import SideBar from '../../components/SideBar/SideBar'
+import { FaShieldAlt, FaBell } from "react-icons/fa";
 
 const MOCK_NOTIFICATIONS = [
     {
@@ -57,60 +58,69 @@ const NotificationPage = () => {
     };
 
     return (
-        <div className='flex min-h-scree'>
+        <div className='flex flex-col lg:flex-row min-h-screen bg-[#14161B] text-white'>
             <SideBar />
-
-            <div className='flex-1 p-6'>
-
-                <div className='flex justify-between items-center mb-8'>
-                    <h2 className="font-bold text-3xl mb-6">Danh sách mong muốn</h2>
-
+            <div className='flex-1 p-4 lg:p-8'>
+                <div className='flex flex-col sm:flex-row justify-between items-center mb-6 lg:mb-8 gap-4'>
+                    <h2 className="font-bold text-2xl lg:text-3xl">Thông báo của bạn</h2>
+                    {notifications.some(n => !n.isRead) && (
+                        <button
+                            onClick={() => setNotifications(notifications.map(n => ({ ...n, isRead: true })))}
+                            className="text-sm text-red-500 hover:text-red-400 transition-colors"
+                        >
+                            Đánh dấu tất cả đã đọc
+                        </button>
+                    )}
                 </div>
 
-                {/* List Notifications */}
-                <div className='space-y-4'>
+                <div className='space-y-3 lg:space-y-4 max-w-4xl mx-auto lg:mx-0'>
                     {notifications.length > 0 ? (
                         notifications.map((noti) => (
                             <div
                                 key={noti.id}
                                 onClick={() => handleMarkAsRead(noti.id)}
-                                className={`flex items-start gap-4 p-4 rounded-lg cursor-pointer transition-all border-l-4 
-                    ${noti.isRead ? 'bg-[#1f1f1f] border-transparent opacity-70' : 'bg-[#2b2b2b] border-red-600 shadow-lg'}`}
+                                className={`flex items-start gap-3 lg:gap-4 p-4 rounded-xl cursor-pointer transition-all border-l-4 
+                                    ${noti.isRead
+                                        ? 'bg-[#1f2128] border-transparent opacity-60'
+                                        : 'bg-[#25272F] border-red-600 shadow-lg hover:bg-[#2d2f37]'}`}
                             >
                                 <div className='flex-shrink-0'>
                                     {noti.image ? (
-                                        <img src={noti.image} alt="" className='w-24 h-14 object-cover rounded' />
+                                        <img src={noti.image} alt="" className='w-16 h-10 lg:w-24 lg:h-14 object-cover rounded-md' />
                                     ) : (
-                                        <div className='w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center'>
-                                            <span className='text-xl'>🔔</span>
+                                        <div className={`w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center 
+                                            ${noti.isRead ? 'bg-gray-800' : 'bg-red-600/20 text-red-500'}`}>
+                                            <span className='text-lg lg:text-xl'>
+                                                {noti.type === 'security' ? <FaShieldAlt className="text-blue-500" /> : <FaBell className="text-yellow-500" />}
+                                            </span>
                                         </div>
                                     )}
                                 </div>
-
-                                <div className='flex-1'>
-                                    <div className='flex justify-between'>
-                                        <h3 className={`font-semibold ${noti.isRead ? 'text-gray-400' : 'text-white'}`}>
+                                <div className='flex-1 min-w-0'>
+                                    <div className='flex justify-between items-start gap-2'>
+                                        <h3 className={`font-semibold text-sm lg:text-base leading-tight ${noti.isRead ? 'text-gray-400' : 'text-white'}`}>
                                             {noti.title}
                                         </h3>
-                                        <span className='text-xs text-gray-500'>{noti.time}</span>
+                                        <span className='text-[10px] lg:text-xs text-gray-500 whitespace-nowrap'>{noti.time}</span>
                                     </div>
-                                    <p className='text-sm text-gray-400 mt-1'>{noti.content}</p>
+                                    <p className='text-xs lg:text-sm text-gray-400 mt-1 line-clamp-2 lg:line-clamp-none'>
+                                        {noti.content}
+                                    </p>
                                 </div>
 
                                 {!noti.isRead && (
-                                    <div className='w-2 h-2 bg-red-600 rounded-full mt-2'></div>
+                                    <div className='w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0'></div>
                                 )}
                             </div>
                         ))
                     ) : (
                         <div className='text-center py-20 text-gray-500'>
-                            <p className='text-4xl mb-4'>📭</p>
-                            <p>Bạn không có thông báo nào.</p>
+                            <p className='text-5xl mb-4'>📭</p>
+                            <p className="text-lg">Bạn không có thông báo nào.</p>
                         </div>
                     )}
                 </div>
             </div>
-
         </div>
     )
 }

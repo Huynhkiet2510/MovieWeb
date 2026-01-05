@@ -58,7 +58,7 @@ const NotificationPage = () => {
     };
 
     return (
-        <div className='flex flex-col lg:flex-row min-h-screen bg-[#14161B] text-white'>
+        <div className='flex flex-col lg:flex-row min-h-screen text-white'>
             <SideBar />
             <div className='flex-1 p-4 lg:p-8'>
                 <div className='flex flex-col sm:flex-row justify-between items-center mb-6 lg:mb-8 gap-4'>

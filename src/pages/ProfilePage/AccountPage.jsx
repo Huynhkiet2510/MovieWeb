@@ -6,13 +6,13 @@ const AccountPage = () => {
   const user = useSelector(state => state.auth.user)
 
   if (!user) return (
-    <div className="flex justify-center items-center min-h-screen bg-[#14161B] text-white">
+    <div className="flex justify-center items-center min-h-screen text-white">
       <p className="animate-pulse">Đang tải thông tin...</p>
     </div>
   );
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-[#14161B] text-white">
+    <div className="flex flex-col lg:flex-row min-h-screen ] text-white">
       <SideBar />
       <main className="flex-1 p-4 lg:p-10">
         <div className="text-center lg:text-left mb-8">

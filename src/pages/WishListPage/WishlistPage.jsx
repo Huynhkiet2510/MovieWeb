@@ -16,7 +16,7 @@ const WishListPage = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-[#14161B] text-white">
+    <div className="flex flex-col lg:flex-row min-h-screen text-white">
       <SideBar />
       <div className="flex-1">
         <div className="p-6">

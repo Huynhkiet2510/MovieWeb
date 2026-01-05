@@ -16,7 +16,7 @@ const FavoritePage = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-[#14161B] text-white">
+    <div className="flex flex-col lg:flex-row min-h-screen text-white">
       <SideBar />
       
       <div className="flex-1 flex flex-col">
@@ -54,7 +54,6 @@ const FavoritePage = () => {
           )}
         </div>
 
-        {/* Đẩy Pagination xuống cuối trang */}
         <div className="mt-auto py-8">
           <Pagination
             page={page}

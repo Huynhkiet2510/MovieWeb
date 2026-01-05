@@ -1,93 +1,57 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import CartItem from "../../components/CartItem/CartItem";
 import SideBar from "../../components/SideBar/SideBar";
 import MovieSkeleton from "../../components/MovieSkeleton/MovieSkeleton";
-import getWishlistMulti from "../../services/WishListApi"
-import axios from "axios";
+import { useFetchWishList } from "./useFetchWishList"
+import Pagination from "../../components/Pagination/Pagination";
+import { useSearchParams } from "react-router-dom";
 
 const WishListPage = () => {
-  const [wishList, setWishlist] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+  const { wishList, loading, error, totalPages } = useFetchWishList(page);
 
-  const user = useSelector(state => state.auth.user);
-  const session_id = useSelector(state => state.auth.session_id);
-
-  useEffect(() => {
-    if (!user?.id || !session_id) return;
-
-    const controller = new AbortController();
-
-    const fetchWishList = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const [movieRes, tvRes] = await getWishlistMulti(
-          user.id,
-          session_id,
-          { signal: controller.signal }
-        );
-
-        const merged = [
-          ...movieRes.data.results.map(item => ({
-            ...item,
-            media_type: "movie",
-            display_title: item.title,
-          })),
-          ...tvRes.data.results.map(item => ({
-            ...item,
-            media_type: "tv",
-            display_title: item.name,
-          })),
-        ];
-
-        setWishlist(merged);
-      } catch (err) {
-        if (!axios.isCancel(err)) {
-          console.error(err);
-          setError(err);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchWishList();
-    return () => controller.abort();
-  }, [user?.id, session_id]);
-
-
+  const handlePageChange = (newPage) => {
+    setSearchParams({ page: newPage })
+    window.scrollTo(0, 0);
+  };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-[#14161B] text-white">
       <SideBar />
-      <div className="flex-1 p-6">
-        <h2 className="font-bold text-3xl mb-6">Danh sách mong muốn</h2>
-        {loading ? (
-          <div className="grid grid-cols-6 gap-4">
-            {Array(12)
-              .fill(0)
-              .map((_, i) => (
-                <MovieSkeleton key={i} />
+      <div className="flex-1">
+        <div className="p-6">
+          <h2 className="font-bold text-2xl lg:text-3xl mb-6 text-center lg:text-left">Danh sách mong muốn</h2>
+          {loading ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {Array(12)
+                .fill(0)
+                .map((_, i) => (
+                  <MovieSkeleton key={i} />
+                ))}
+            </div>
+          ) : error ? (
+            <p className="text-red-500 text-center">
+              Không thể tải dữ liệu. Vui lòng thử lại!
+            </p>
+          ) : wishList.length === 0 ? (
+            <p className="bg-[#14161D] w-full text-center p-10 rounded-2xl text-sm text-gray-400">
+              Bạn không có phim nào trong danh sách.
+            </p>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {wishList.map(item => (
+                <CartItem key={`${item.media_type}-${item.id}`} item={item} />
               ))}
-          </div>
-        ) : error ? (
-          <p className="text-red-500 text-center">
-            Không thể tải dữ liệu. Vui lòng thử lại!
-          </p>
-        ) : wishList.length === 0 ? (
-          <p className="bg-[#14161D] w-full text-center p-10 rounded-2xl text-sm text-gray-400">
-            Bạn không có phim nào trong danh sách.
-          </p>
-        ) : (
-          <div className="grid grid-cols-6 gap-4">
-            {wishList.map(item => (
-              <CartItem key={`${item.media_type}-${item.id}`} item={item} />
-            ))}
-          </div>
-        )}
+            </div>
+          )}
+        </div>
+        <div className="mt-2 min-h-[30px]">
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
       </div>
     </div>
   );

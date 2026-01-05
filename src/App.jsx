@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import MovieListPage from "./pages/MovieList/MovieList";
-import MovieDetail from "./pages/MovieDetail/MovieDetail";
+import MovieListPage from "./pages/MovieListPage/MovieList";
+import MovieDetail from "./pages/MovieDetailPage/MovieDetail";
 import AuthPage from "./pages/AuthPage/AuthPage";
 import ProfilePage from "./pages/ProfilePage/AccountPage";
 import WishListPage from "./pages/WishListPage/WishListPage";
@@ -11,15 +11,18 @@ import WatchTrailerPage from "./pages/WatchTrailerPage/WatchTrailerPage";
 import RequireAuth from "./routes/RequireAuth";
 import RequireGuest from "./routes/RequireGuest";
 import NotificationPage from "./pages/NotificationPage/NotificationPage";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
+  const isMobile = window.innerWidth < 768;
+  
   return (
     <Router>
+      <ScrollToTop />
       <ToastContainer
-        position="top-right"
-        style={{ top: '50px', right: '20px' }}
+        position={window.innerWidth < 768 ? "top-center" : "top-right"}
         autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -28,6 +31,12 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
+        theme="dark"
+        style={{ 
+          width: window.innerWidth < 768 ? '90%' : '350px',
+          top: window.innerWidth < 768 ? '10px' : '50px',
+          right: window.innerWidth < 768 ? 'auto' : '20px'
+        }}
       />
       <Routes>
         <Route path="/login" element={

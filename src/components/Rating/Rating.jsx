@@ -64,7 +64,7 @@ const Rating = () => {
     }, []);
 
     return (
-        <div className="flex items-center gap-1 ml-8">
+        <div className="flex items-center gap-1">
             {[1, 2, 3, 4, 5].map(star => (
                 <FaStar
                     key={star}

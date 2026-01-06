@@ -113,11 +113,11 @@ const Navbar = () => {
           </div>
 
           <button
-            className={`lg:hidden text-lg p-2 rounded-md transition-all ${openMobileMenu ? "bg-red-600" : "hover:bg-gray-700"
+            className={`lg:hidden text-lg p-2 rounded-md transition-all ${openMobileMenu ? "bg-red-600" : "hover:bg-nav-icon-hover"
               }`}
             onClick={() => setOpenMobileMenu(!openMobileMenu)}
           >
-            {openMobileMenu ? <FaTimes /> : <FaBars />}
+            {openMobileMenu ? <FaTimes className="text-nav-icon"/> : <FaBars className="text-nav-icon"/>}
           </button>
 
           <NavbarUserMenu
@@ -134,7 +134,7 @@ const Navbar = () => {
       </div>
 
       <div className={`
-        lg:hidden overflow-hidden transition-all duration-300 ease-in-out bg-[#23242f] 
+        lg:hidden overflow-hidden transition-all duration-300 ease-in-out 
         ${openMobileMenu ? "max-h-[500px] border-t border-gray-700" : "max-h-0"}
       `}>
         <div className="p-5">
@@ -152,7 +152,7 @@ const Navbar = () => {
         <div className="flex shadow-lg">
           <input
             type="text"
-            className="w-full bg-[#2b2d35] rounded-l-md px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-red-600"
+            className="w-full bg-input-search text-text-muted placeholder-text-muted rounded-l-md px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-red-600"
             placeholder="Nhập tên phim..."
             value={searchInput}
             onKeyDown={handleKeyDown}
@@ -160,7 +160,7 @@ const Navbar = () => {
           />
           <button
             onClick={handleSearch}
-            className="bg-red-600 px-4 rounded-r-md text-sm font-bold active:scale-95 transition-transform"
+            className="bg-red-600 text-text-muted px-4 rounded-r-md text-sm font-bold active:scale-95 transition-transform"
           >
             Tìm
           </button>

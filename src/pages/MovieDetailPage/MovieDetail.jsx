@@ -24,9 +24,7 @@ const MovieDetail = () => {
     <div className="bg-page-bg relative movie-detail">
       <button
         onClick={() => navigate(-1)}
-        className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 rounded-lg text-white
- hover:bg-[#1F202A] transition cursor-pointer"
-      >
+        className="absolute top-6 left-6 z-10 flex items-center gap-2 bg-card-bg/60 hover:bg-red-600 hover:text-white text-text-main px-4 py-2 rounded-lg transition-all duration-200 border border-border shadow-lg backdrop-blur-md">
         <FaArrowLeft />
         <span>Quay lại</span>
       </button>

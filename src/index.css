@@ -14,6 +14,8 @@
   --color-notification-unread: #F1F5F9;
   --color-card-skeleton: #D1D5DB;
   --color-review-skeleton: #E2E4F0;
+  --color-nav-icon: #2D2D30;
+   --color-nav-icon-hover: #9ca3af;
 }
 
 @variant dark (&:where(.dark, .dark *));
@@ -32,4 +34,6 @@
   --color-notification-unread: #25272F;
   --color-card-skeleton: #2A2C35;
   --color-review-skeleton: #191B24;
+  --color-nav-icon: #ffffff;
+  --color-nav-icon-hover: #374151;
 }

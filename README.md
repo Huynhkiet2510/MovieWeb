@@ -1,4 +1,4 @@
-[MovieVerse]
+[MovieWeb]
 Một ứng dụng web xem thông tin phim toàn diện được xây dựng với React.js và Tailwind CSS, tích hợp dữ liệu thời gian thực từ TMDB API.
 
 🚀 Tính năng nổi bật

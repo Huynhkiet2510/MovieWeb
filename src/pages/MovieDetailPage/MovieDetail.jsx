@@ -21,12 +21,11 @@ const MovieDetail = () => {
   }
 
   return (
-    <div className="relative movie-detail">
+    <div className="bg-page-bg relative movie-detail">
       <button
         onClick={() => navigate(-1)}
-        className="absolute top-6 left-6 z-20 flex items-center gap-2
-                         px-4 py-2 rounded-lg text-white
-                         hover:bg-[#1F202A] transition cursor-pointer"
+        className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 rounded-lg text-white
+ hover:bg-[#1F202A] transition cursor-pointer"
       >
         <FaArrowLeft />
         <span>Quay lại</span>

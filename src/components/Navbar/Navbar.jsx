@@ -11,7 +11,7 @@ import NavbarLinks from "./NavbarLinks";
 const Navbar = () => {
   const { authLoading, user } = useSelector((state) => state.auth);
 
-  const { searchInput, handleInputChange, setSearchInput, handleSearch, handleKeyDown } = useSearch();
+  const { searchInput, setSearchInput, handleSearch, handleKeyDown } = useSearch();
 
   const {
     resetFilters,
@@ -80,7 +80,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav ref={navRef} className="bg-[#1f202a] text-white sticky top-0 z-[1000] shadow-xl">
+    <nav ref={navRef} className="bg-navbar sticky top-0 z-[1000] shadow-md">
       <div className="max-w-[1440px] mx-auto px-4 py-3 flex justify-between items-center gap-4">
         <div
           onClick={handleLogoClick}
@@ -96,11 +96,11 @@ const Navbar = () => {
             value={searchInput}
             onKeyDown={handleKeyDown}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="w-full bg-[#2b2d35] border border-transparent focus:border-red-600 rounded-l-md px-4 py-2 outline-none transition-all text-sm"
+            className="w-full bg-input-search text-text-muted placeholder-text-muted border border-transparent focus:border-red-600 rounded-l-md px-4 py-2 outline-none transition-all text-sm"
           />
           <button
             onClick={handleSearch}
-            className="bg-red-600 ml-2 px-5 py-2 rounded-r-md hover:bg-red-700 transition-colors font-medium text-sm"
+            className="bg-red-600 text-text-muted ml-2 px-5 py-2 rounded-r-md hover:bg-red-700 transition-colors font-medium text-sm"
           >
             Tìm
           </button>

@@ -16,9 +16,8 @@ const FavoritePage = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen text-white">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-page-bg text-text-main transition-colors duration-300">
       <SideBar />
-      
       <div className="flex-1 flex flex-col">
         <div className="p-4 lg:p-8">
           <h2 className="font-bold text-2xl lg:text-3xl mb-6 text-center lg:text-left">
@@ -54,7 +53,7 @@ const FavoritePage = () => {
           )}
         </div>
 
-        <div className="mt-auto py-8">
+        <div className="mt-2 pb-10 min-h-[30px]">
           <Pagination
             page={page}
             totalPages={totalPages}

@@ -16,7 +16,7 @@ const WishListPage = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen text-white">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-page-bg text-text-main transition-colors duration-300">
       <SideBar />
       <div className="flex-1">
         <div className="p-6">
@@ -45,7 +45,7 @@ const WishListPage = () => {
             </div>
           )}
         </div>
-        <div className="mt-2 min-h-[30px]">
+        <div className="mt-2 pb-10 min-h-[30px]">
           <Pagination
             page={page}
             totalPages={totalPages}

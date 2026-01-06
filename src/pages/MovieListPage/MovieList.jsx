@@ -44,18 +44,19 @@ const MovieList = () => {
   });
 
   return (
-    <div className="text-center min-h-screen w-full px-5">
-      <h2 className="font-bold text-xl md:text-3xl tracking-tight mt-5">{title}</h2>
-
+    <div className="text-center min-h-screen w-full px-5 bg-page-bg text-text-main transition-colors duration-300">
+      <h2 className="font-bold text-xl md:text-3xl tracking-tight pt-8 text-text-main">
+        {title}
+      </h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 md:gap-6 py-6">
         {loading ? (
           Array(16).fill(0).map((_, i) => <MovieSkeleton key={i} />)
         ) : error ? (
-          <p className="col-span-full text-red-500 text-center">
+          <p className="col-span-full text-red-500 text-center font-medium">
             Không thể tải dữ liệu. Vui lòng thử lại!
           </p>
         ) : listMovie.length === 0 ? (
-          <p className="col-span-full bg-[#14161D] max-w-sm text-center p-10 mt-8 mx-auto rounded-2xl text-sm text-gray-400">
+          <p className="col-span-full bg-card-bg border border-border max-w-sm text-center p-10 mt-8 mx-auto rounded-2xl text-sm text-text-muted transition-colors">
             Không có phim nào
           </p>
         ) : (

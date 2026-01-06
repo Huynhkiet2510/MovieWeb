@@ -58,7 +58,7 @@ const NotificationPage = () => {
     };
 
     return (
-        <div className='flex flex-col lg:flex-row min-h-screen text-white'>
+        <div className='bg-page-bg flex flex-col lg:flex-row min-h-screen text-text-main transition-colors duration-300'>
             <SideBar />
             <div className='flex-1 p-4 lg:p-8'>
                 <div className='flex flex-col sm:flex-row justify-between items-center mb-6 lg:mb-8 gap-4'>
@@ -66,7 +66,7 @@ const NotificationPage = () => {
                     {notifications.some(n => !n.isRead) && (
                         <button
                             onClick={() => setNotifications(notifications.map(n => ({ ...n, isRead: true })))}
-                            className="text-sm text-red-500 hover:text-red-400 transition-colors"
+                            className="text-sm font-medium text-red-600 hover:text-red-500 transition-colors"
                         >
                             Đánh dấu tất cả đã đọc
                         </button>
@@ -81,40 +81,42 @@ const NotificationPage = () => {
                                 onClick={() => handleMarkAsRead(noti.id)}
                                 className={`flex items-start gap-3 lg:gap-4 p-4 rounded-xl cursor-pointer transition-all border-l-4 
                                     ${noti.isRead
-                                        ? 'bg-[#1f2128] border-transparent opacity-60'
-                                        : 'bg-[#25272F] border-red-600 shadow-lg hover:bg-[#2d2f37]'}`}
+                                        ? 'bg-card-bg border-transparent opacity-70' // Thẻ đã đọc
+                                        : 'bg-notification-unread border-red-600 shadow-md hover:bg-card-hover' // Thẻ chưa đọc
+                                    }`}
                             >
                                 <div className='flex-shrink-0'>
                                     {noti.image ? (
                                         <img src={noti.image} alt="" className='w-16 h-10 lg:w-24 lg:h-14 object-cover rounded-md' />
                                     ) : (
                                         <div className={`w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center 
-                                            ${noti.isRead ? 'bg-gray-800' : 'bg-red-600/20 text-red-500'}`}>
+                                            ${noti.isRead ? 'bg-gray-200 dark:bg-gray-800' : 'bg-red-600/10 text-red-600'}`}>
                                             <span className='text-lg lg:text-xl'>
                                                 {noti.type === 'security' ? <FaShieldAlt className="text-blue-500" /> : <FaBell className="text-yellow-500" />}
                                             </span>
                                         </div>
                                     )}
                                 </div>
+
                                 <div className='flex-1 min-w-0'>
                                     <div className='flex justify-between items-start gap-2'>
-                                        <h3 className={`font-semibold text-sm lg:text-base leading-tight ${noti.isRead ? 'text-gray-400' : 'text-white'}`}>
+                                        <h3 className={`font-semibold text-sm lg:text-base leading-tight ${noti.isRead ? 'text-text-muted' : 'text-text-main'}`}>
                                             {noti.title}
                                         </h3>
-                                        <span className='text-[10px] lg:text-xs text-gray-500 whitespace-nowrap'>{noti.time}</span>
+                                        <span className='text-[10px] lg:text-xs text-text-muted whitespace-nowrap'>{noti.time}</span>
                                     </div>
-                                    <p className='text-xs lg:text-sm text-gray-400 mt-1 line-clamp-2 lg:line-clamp-none'>
+                                    <p className={`text-xs lg:text-sm mt-1 line-clamp-2 lg:line-clamp-none ${noti.isRead ? 'text-text-muted/80' : 'text-text-muted'}`}>
                                         {noti.content}
                                     </p>
                                 </div>
 
                                 {!noti.isRead && (
-                                    <div className='w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0'></div>
+                                    <div className='w-2 h-2 bg-red-600 rounded-full mt-2 flex-shrink-0 animate-pulse'></div>
                                 )}
                             </div>
                         ))
                     ) : (
-                        <div className='text-center py-20 text-gray-500'>
+                        <div className='text-center py-20 text-text-muted'>
                             <p className='text-5xl mb-4'>📭</p>
                             <p className="text-lg">Bạn không có thông báo nào.</p>
                         </div>

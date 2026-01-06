@@ -59,31 +59,41 @@ const WatchTrailerPage = () => {
     const handleBack = () => navigate(-1);
 
     return (
-        <div className="relative w-full h-screen bg-black flex justify-center items-center p-4">
+        <div className="relative w-full h-screen bg-page-bg flex justify-center items-center p-4 transition-colors duration-500">
             <button
                 onClick={handleBack}
                 className="absolute top-6 left-6 z-10 flex items-center gap-2 
-                           bg-black/60 hover:bg-white/20 text-white 
-                           px-4 py-2 rounded-lg transition-all duration-200"
+                           bg-card-bg/60 hover:bg-red-600 hover:text-white text-text-main 
+                           px-4 py-2 rounded-lg transition-all duration-200 border border-border shadow-lg backdrop-blur-md"
             >
-                <FaArrowLeft className="w-5 h-5" />
-                <span>Quay lại</span>
+                <FaArrowLeft className="w-4 h-4" />
+                <span className="font-medium">Quay lại</span>
             </button>
 
             {loading ? (
                 <WatchTrailerSkeleton />
             ) : error ? (
-                <div className="text-red-500 text-lg">{error}</div>
+                <div className="text-red-600 font-semibold bg-red-600/10 px-6 py-4 rounded-xl border border-red-600/20">
+                    {error}
+                </div>
             ) : noTrailer ? (
-                <div className="bg-[#14161D] w-full max-w-md text-center p-10 rounded-2xl text-sm text-gray-400">
-                    <p>Rất tiếc, hiện tại không có trailer cho phim này.</p>
+                <div className="bg-card-bg w-full max-w-md text-center p-10 rounded-2xl shadow-xl border border-border">
+                    <div className="text-5xl mb-4">🎬</div>
+                    <p className="text-text-main font-medium text-lg mb-2">Không tìm thấy trailer</p>
+                    <p className="text-text-muted text-sm">Rất tiếc, hiện tại hệ thống chưa cập nhật trailer cho phim này.</p>
+                    <button
+                        onClick={handleBack}
+                        className="mt-6 text-red-600 font-bold hover:underline"
+                    >
+                        Quay lại trang trước
+                    </button>
                 </div>
             ) : (
-                <div className="w-full h-full max-w-6xl aspect-video">
+                <div className="w-full h-full max-w-6xl aspect-video relative group">
                     <iframe
                         src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0`}
                         title="Movie Trailer"
-                        className="w-full h-full rounded-xl shadow-2xl"
+                        className="w-full h-full rounded-2xl  border border-border"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                     />
@@ -92,5 +102,6 @@ const WatchTrailerPage = () => {
         </div>
     );
 };
+
 
 export default WatchTrailerPage;

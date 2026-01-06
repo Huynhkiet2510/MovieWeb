@@ -32,11 +32,11 @@ const NavbarUserMenu = ({ userInfo, menuRef, openMenu, setOpenMenu, navigate, lo
                     />
 
                     <div className={`
-                        absolute top-full right-0 mt-3 bg-[#2b2c38] rounded-xl shadow-2xl w-48 overflow-hidden z-[1001]
+                        absolute top-full right-0 mt-3 bg-page-bg rounded-xl shadow-2xl w-48 overflow-hidden z-[1001]
                         transition-all duration-300 origin-top-right border border-gray-700
                         ${openMenu ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}
                     `}>
-                        <div className="px-4 py-3 bg-[#3a3b4d] flex items-center gap-2">
+                        <div className="px-4 py-3 bg-page-bg text-text-muted flex items-center gap-2">
                             <FaUser className="text-red-500 shrink-0" />
                             <span className="font-bold truncate text-sm">{userInfo.username}</span>
                         </div>
@@ -45,11 +45,12 @@ const NavbarUserMenu = ({ userInfo, menuRef, openMenu, setOpenMenu, navigate, lo
                             {[
                                 { label: "Yêu Thích", path: "/favorite" },
                                 { label: "Danh Sách", path: "/wishlist" },
+                                { label: "Thông Báo", path: "/notification" },
                                 { label: "Tài Khoản", path: "/profile" },
                             ].map((item) => (
                                 <div
                                     key={item.path}
-                                    className="px-4 py-2 text-sm cursor-pointer hover:bg-red-600 hover:text-white transition-colors text-left"
+                                    className="px-4 py-2 text-sm text-text-muted cursor-pointer hover:bg-red-600 hover:text-text-muted transition-colors text-left"
                                     onClick={() => { navigate(item.path); setOpenMenu(false); }}
                                 >
                                     {item.label}

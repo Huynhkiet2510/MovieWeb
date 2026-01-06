@@ -14,10 +14,18 @@ import NotificationPage from "./pages/NotificationPage/NotificationPage";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 function App() {
-  const isMobile = window.innerWidth < 768;
-  
+  const mode = useSelector((state) => state.theme.mode);
+
+  useEffect(() => {
+    localStorage.setItem("theme", mode);
+    document.documentElement.classList.toggle("dark", mode === "dark");
+  }, [mode]);
+
+
   return (
     <Router>
       <ScrollToTop />
@@ -32,7 +40,7 @@ function App() {
         draggable
         pauseOnHover
         theme="dark"
-        style={{ 
+        style={{
           width: window.innerWidth < 768 ? '90%' : '350px',
           top: window.innerWidth < 768 ? '10px' : '50px',
           right: window.innerWidth < 768 ? 'auto' : '20px'

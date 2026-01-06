@@ -1,16 +1,70 @@
-# React + Vite
+[MovieVerse]
+Một ứng dụng web xem thông tin phim toàn diện được xây dựng với React.js và Tailwind CSS, tích hợp dữ liệu thời gian thực từ TMDB API.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🚀 Tính năng nổi bật
+🎥 Khám phá điện ảnh
+Danh sách đa dạng: Xem phim phổ biến (Popular), phim lẻ, phim bộ, xu hướng (Trending), và đánh giá cao (Top-rated).
 
-Currently, two official plugins are available:
+Bộ lọc thông minh: Lọc phim theo thể loại (Genre), quốc gia (Country) và năm phát hành.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Tìm kiếm mạnh mẽ: Tìm kiếm phim yêu thích với dữ liệu thời gian thực.
 
-## React Compiler
+🛠 Trải nghiệm người dùng (UX)
+Movie Detail: Thông tin chi tiết về phim, tóm tắt nội dung, điểm đánh giá.
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Video Trailer: Xem trực tiếp trailer từ YouTube ngay trên ứng dụng.
 
-## Expanding the ESLint configuration
+Review System: Đọc đánh giá từ cộng đồng người xem trên TMDB.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Light/Dark Mode: Giao diện linh hoạt, bảo vệ mắt người dùng với nút chuyển đổi nhanh.
+
+Responsive Design: Tối ưu hóa hiển thị hoàn hảo trên Mobile, Tablet và Desktop.
+
+👤 Cá nhân hóa (State Management)
+Yêu thích & Wishlist: Thêm/Xóa phim vào danh sách yêu thích hoặc danh sách chờ xem.
+
+Rating: Đánh giá số sao cho phim.
+
+Profile Page: Hiển thị thông tin cá nhân và quản lý các danh sách đã lưu.
+
+Notifications: Hệ thống thông báo giả lập (Mockup UI) cho các cập nhật mới.
+
+🛠 Công nghệ sử dụng
+Frontend: React.js (Hooks, Context API/Redux)
+
+Styling: Tailwind CSS (Responsive, Dark Mode)
+
+Icons: React Icons (FontAwesome, Lucide)
+
+API: TMDB (The Movie Database)
+
+HTTP Client: Axios / Fetch API
+
+Deployment: Vercel / Netlify
+
+📸 Demo hình ảnh
+(Mẹo: Bạn nên chụp ảnh màn hình web của mình rồi chèn link ảnh vào đây)
+
+⚙️ Cài đặt dự án
+Để chạy dự án này ở môi trường local, hãy làm theo các bước sau:
+
+Clone dự án:
+
+Bash
+
+git clone https://github.com/[username]/[repo-name].git
+Cài đặt các thư viện:
+
+Bash
+
+npm install
+Tạo file .env ở thư mục gốc và thêm API Key của bạn từ TMDB:
+
+Đoạn mã
+
+REACT_APP_TMDB_KEY=your_api_key_here
+Chạy ứng dụng:
+
+Bash
+
+npm start

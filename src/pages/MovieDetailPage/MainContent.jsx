@@ -34,7 +34,7 @@ const MainContent = ({ movie, duration, director, cast, selectedType, id, toggle
                     <div className="w-full lg:w-auto flex justify-center lg:justify-start">
                         <button
                             onClick={() => navigate(`/watch/${selectedType}/${id}`)}
-                            className="flex items-center justify-center gap-2 bg-gradient-to-r from-green-600 to-green-300 hover:shadow-[0_0_15px_0_rgba(22,163,74,0.6),0_0_25px_0_rgba(134,239,172,0.4)] text-black text-lg font-bold px-8 py-3 rounded-full cursor-pointer transition-all duration-400 shrink-0"
+                            className="flex items-center justify-center gap-2 bg-gradient-to-r from-red-600 to-red-300 hover:shadow-[0_0_15px_0_rgba(220,38,38,0.6),0_0_25px_0_rgba(252,165,165,0.4)] text-black text-lg font-bold px-8 py-3 rounded-full cursor-pointer transition-all duration-400 shrink-0"
                         >
                             <FaPlay /> Xem Trailer
                         </button>

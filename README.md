@@ -1,70 +1,83 @@
-[MovieWeb]
-Một ứng dụng web xem thông tin phim toàn diện được xây dựng với React.js và Tailwind CSS, tích hợp dữ liệu thời gian thực từ TMDB API.
+# 🎬 Movie Web – React + TMDB API
 
-🚀 Tính năng nổi bật
-🎥 Khám phá điện ảnh
-Danh sách đa dạng: Xem phim phổ biến (Popular), phim lẻ, phim bộ, xu hướng (Trending), và đánh giá cao (Top-rated).
+A fully responsive movie web application built with **ReactJS**, powered by **The Movie Database (TMDB) API**.  
+This project simulates a real-world movie platform, focusing on clean UI/UX, state management, API integration, and user interactions such as favorites, wishlist, and ratings.
 
-Bộ lọc thông minh: Lọc phim theo thể loại (Genre), quốc gia (Country) và năm phát hành.
+---
 
-Tìm kiếm mạnh mẽ: Tìm kiếm phim yêu thích với dữ liệu thời gian thực.
+## 🚀 Live Demo
+👉 (Optional) Add your deployed link here  
 
-🛠 Trải nghiệm người dùng (UX)
-Movie Detail: Thông tin chi tiết về phim, tóm tắt nội dung, điểm đánh giá.
+---
 
-Video Trailer: Xem trực tiếp trailer từ YouTube ngay trên ứng dụng.
+## 🧩 Features
 
-Review System: Đọc đánh giá từ cộng đồng người xem trên TMDB.
+### 🎥 Movie Browsing
+- Display movie list from TMDB API
+- Popular movies
+- Trending movies
+- Top-rated movies
+- Movies & TV series
+- Filter movies by:
+  - Genre
+  - Country
+  - Category
 
-Light/Dark Mode: Giao diện linh hoạt, bảo vệ mắt người dùng với nút chuyển đổi nhanh.
+### 🔍 Movie Detail
+- Movie details (poster, overview, genres, release date, rating)
+- Watch trailer (YouTube embed)
+- View movie reviews
+- Rate movie using star rating
 
-Responsive Design: Tối ưu hóa hiển thị hoàn hảo trên Mobile, Tablet và Desktop.
+### ❤️ User Interaction
+- Add / Remove movies from Favorites
+- Add / Remove movies from Wishlist
+- View:
+  - Favorite movies list
+  - Wishlist movies list
 
-👤 Cá nhân hóa (State Management)
-Yêu thích & Wishlist: Thêm/Xóa phim vào danh sách yêu thích hoặc danh sách chờ xem.
+### 👤 Profile & Notification
+- Profile page (read-only user information)
+- Notification page (static mock data for UI demonstration)
 
-Rating: Đánh giá số sao cho phim.
+### 🎨 UI / UX
+- Light / Dark theme toggle
+- Fully responsive (desktop, tablet, mobile)
+- Skeleton loading for better user experience
+- Clean and modern UI
 
-Profile Page: Hiển thị thông tin cá nhân và quản lý các danh sách đã lưu.
+---
 
-Notifications: Hệ thống thông báo giả lập (Mockup UI) cho các cập nhật mới.
+## 🛠️ Tech Stack
 
-🛠 Công nghệ sử dụng
-Frontend: React.js (Hooks, Context API/Redux)
+### Front-end
+- **ReactJS**
+- **React Router**
+- **Redux Toolkit**
+- **Axios**
+- **React Icons**
 
-Styling: Tailwind CSS (Responsive, Dark Mode)
+### Styling
+- CSS / SCSS (or Tailwind CSS if applicable)
+- Responsive layout
+- Dark / Light theme support
 
-Icons: React Icons (FontAwesome, Lucide)
+### API
+- **TMDB (The Movie Database) API**
 
-API: TMDB (The Movie Database)
+---
 
-HTTP Client: Axios / Fetch API
+## ⚙️ Installation & Run Locally
 
-Deployment: Vercel / Netlify
+```bash
+# Clone repository
+git clone https://github.com/Huynhkiet2510/MovieWeb.git
 
-📸 Demo hình ảnh
-(Mẹo: Bạn nên chụp ảnh màn hình web của mình rồi chèn link ảnh vào đây)
+# Move into project directory
+cd MovieWeb
 
-⚙️ Cài đặt dự án
-Để chạy dự án này ở môi trường local, hãy làm theo các bước sau:
-
-Clone dự án:
-
-Bash
-
-git clone https://github.com/[username]/[repo-name].git
-Cài đặt các thư viện:
-
-Bash
-
+# Install dependencies
 npm install
-Tạo file .env ở thư mục gốc và thêm API Key của bạn từ TMDB:
 
-Đoạn mã
-
-REACT_APP_TMDB_KEY=your_api_key_here
-Chạy ứng dụng:
-
-Bash
-
-npm start
+# Run development server
+npm run dev

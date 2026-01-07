@@ -41,8 +41,8 @@ function App() {
         pauseOnHover
         theme="dark"
         style={{
-          width: window.innerWidth < 768 ? '90%' : '350px',
-          top: window.innerWidth < 768 ? '10px' : '50px',
+          width: window.innerWidth < 768 ? '80%' : '350px',
+          top: window.innerWidth < 768 ? '20px' : '40px',
           right: window.innerWidth < 768 ? 'auto' : '20px'
         }}
       />

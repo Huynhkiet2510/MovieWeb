@@ -6,7 +6,7 @@ This project simulates a real-world movie platform, focusing on clean UI/UX, sta
 ---
 
 ## 🚀 Live Demo
-👉 (Optional) Add your deployed link here  
+(https://movie-web-yzeh.vercel.app) 
 
 ---
 

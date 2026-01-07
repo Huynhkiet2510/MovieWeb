@@ -18,7 +18,7 @@ const FavoritePage = () => {
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-page-bg text-text-main transition-colors duration-300">
       <SideBar />
-      <div className="flex-1 flex flex-col">
+      <section className="flex-1 flex flex-col">
         <div className="p-4 lg:p-8">
           <h2 className="font-bold text-2xl lg:text-3xl mb-6 text-center lg:text-left">
             Danh sách yêu thích
@@ -31,15 +31,15 @@ const FavoritePage = () => {
             </div>
           ) : error ? (
             <div className="flex justify-center items-center h-64">
-                <p className="text-red-500 bg-red-500/10 px-4 py-2 rounded-lg">
-                    Không thể tải dữ liệu. Vui lòng thử lại!
-                </p>
+              <p className="text-red-500 bg-red-500/10 px-4 py-2 rounded-lg">
+                Không thể tải dữ liệu. Vui lòng thử lại!
+              </p>
             </div>
           ) : favoriteList.length === 0 ? (
             <div className="flex justify-center items-center h-64">
-                <p className="bg-[#25272F] w-full max-w-2xl text-center p-10 rounded-2xl text-sm text-gray-400">
-                    Bạn không có phim yêu thích.
-                </p>
+              <p className="bg-[#25272F] w-full max-w-2xl text-center p-10 rounded-2xl text-sm text-gray-400">
+                Bạn không có phim yêu thích.
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
@@ -53,14 +53,14 @@ const FavoritePage = () => {
           )}
         </div>
 
-        <div className="mt-2 pb-10 min-h-[30px]">
+        <nav className="mt-2 pb-10 min-h-[30px]">
           <Pagination
             page={page}
             totalPages={totalPages}
             onPageChange={handlePageChange}
           />
-        </div>
-      </div>
+        </nav>
+      </section>
     </div>
   );
 };

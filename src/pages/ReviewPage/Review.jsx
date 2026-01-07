@@ -57,11 +57,13 @@ const Review = ({ media, id }) => {
       </div>
 
       {reviews.length > 0 && (
-        <Pagination
-          page={page}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
+        <nav>
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </nav>
       )}
 
     </div>

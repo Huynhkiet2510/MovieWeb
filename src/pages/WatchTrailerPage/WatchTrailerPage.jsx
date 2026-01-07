@@ -33,7 +33,6 @@ const WatchTrailerPage = () => {
                 });
 
                 const videos = res?.data?.results || [];
-                // Ưu tiên tìm video có type là Trailer, nếu không có lấy video đầu tiên
                 const trailer = videos.find(
                     (v) => v.type === "Trailer" && v.site === "YouTube"
                 ) || videos.find(v => v.site === "YouTube");
@@ -59,49 +58,59 @@ const WatchTrailerPage = () => {
     const handleBack = () => navigate(-1);
 
     return (
-        <div className="relative w-full h-screen bg-page-bg flex justify-center items-center p-4 transition-colors duration-500">
-            <button
-                onClick={handleBack}
-                className="absolute top-6 left-6 z-10 flex items-center gap-2 
-                           bg-card-bg/60 hover:bg-red-600 hover:text-white text-text-main 
-                           px-4 py-2 rounded-lg transition-all duration-200 border border-border shadow-lg backdrop-blur-md cursor-pointer"
-            >
-                <FaArrowLeft className="w-4 h-4" />
-                <span className="font-medium">Quay lại</span>
-            </button>
+        <div className="relative w-full min-h-screen bg-page-bg flex flex-col transition-colors duration-500">
+            <div className="p-4 sm:absolute sm:top-6 sm:left-6 sm:z-10 sm:p-0">
+                <button
+                    onClick={handleBack}
+                    className="flex items-center gap-2 bg-card-bg/60 hover:bg-red-600 
+                               hover:text-white text-text-main px-3 py-2 sm:px-4 sm:py-2 
+                               rounded-lg transition-all duration-200 border border-border 
+                               shadow-lg backdrop-blur-md cursor-pointer"
+                >
+                    <FaArrowLeft className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="font-medium text-sm sm:text-base">Quay lại</span>
+                </button>
+            </div>
 
-            {loading ? (
-                <WatchTrailerSkeleton />
-            ) : error ? (
-                <div className="text-red-600 font-semibold bg-red-600/10 px-6 py-4 rounded-xl border border-red-600/20">
-                    {error}
-                </div>
-            ) : noTrailer ? (
-                <div className="bg-card-bg w-full max-w-md text-center p-10 rounded-2xl shadow-xl border border-border">
-                    <div className="text-5xl mb-4">🎬</div>
-                    <p className="text-text-main font-medium text-lg mb-2">Không tìm thấy trailer</p>
-                    <p className="text-text-muted text-sm">Rất tiếc, hiện tại hệ thống chưa cập nhật trailer cho phim này.</p>
-                    <button
-                        onClick={handleBack}
-                        className="mt-6 text-red-600 font-bold hover:underline"
-                    >
-                        Quay lại trang trước
-                    </button>
-                </div>
-            ) : (
-                <div className="w-full h-full max-w-6xl aspect-video relative group">
-                    <iframe
-                        src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0`}
-                        title="Movie Trailer"
-                        className="w-full h-full rounded-2xl  border border-border"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                    />
-                </div>
-            )}
+            <div className="flex-1 flex flex-col sm:justify-center items-center p-0 sm:p-4">
+
+                {loading ? (
+                    <div className="w-full max-w-6xl aspect-video">
+                        <WatchTrailerSkeleton />
+                    </div>
+                ) : error ? (
+                    <div className="mt-10 sm:mt-0 text-red-600 font-semibold bg-red-600/10 px-6 py-4 rounded-xl border border-red-600/20">
+                        {error}
+                    </div>
+                ) : noTrailer ? (
+                    <div className="mt-10 sm:mt-0 bg-card-bg w-[90%] max-w-md text-center p-8 rounded-2xl shadow-xl border border-border">
+                        <div className="text-4xl mb-4">🎬</div>
+                        <p className="text-text-main font-medium text-lg mb-2">Không tìm thấy trailer</p>
+                        <button onClick={handleBack} className="mt-4 text-red-600 font-bold hover:underline">
+                            Quay lại trang trước
+                        </button>
+                    </div>
+                ) : (
+                    <div className="w-full sm:max-w-6xl aspect-video shadow-2xl">
+                        <div className="sm:hidden p-6 w-full text-center">
+                            <h2 className="text-text-main font-bold text-xl uppercase tracking-wider">
+                                Đang xem Trailer
+                            </h2>
+                        </div>
+                        <iframe
+                            src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0`}
+                            title="Movie Trailer"
+                            className="w-full h-full sm:rounded-2xl border-b sm:border border-border"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        />
+                    </div>
+                )}
+
+
+            </div>
         </div>
     );
 };
-
 
 export default WatchTrailerPage;

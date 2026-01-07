@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { logout } from "../../store/authSlice";
 import { useFilter } from "./useFilter";
@@ -79,6 +79,10 @@ const Navbar = () => {
     }
   };
 
+  const toggleMenu = useCallback(() => {
+    setOpenMobileMenu(prev => !prev);
+  }, [])
+
   return (
     <nav ref={navRef} className="bg-navbar sticky top-0 z-[1000] shadow-md">
       <div className="max-w-[1440px] mx-auto px-4 py-3 flex justify-between items-center gap-4">
@@ -113,11 +117,10 @@ const Navbar = () => {
           </div>
 
           <button
-            className={`lg:hidden text-lg p-2 rounded-md transition-all ${openMobileMenu ? "bg-red-600" : "hover:bg-nav-icon-hover"
-              }`}
-            onClick={() => setOpenMobileMenu(!openMobileMenu)}
+            className={`lg:hidden text-lg p-2 rounded-md transition-all ${openMobileMenu ? "bg-red-600" : "hover:bg-nav-icon-hover"}`}
+            onClick={toggleMenu}
           >
-            {openMobileMenu ? <FaTimes className="text-nav-icon"/> : <FaBars className="text-nav-icon"/>}
+            {openMobileMenu ? <FaTimes className="text-nav-icon" /> : <FaBars className="text-nav-icon" />}
           </button>
 
           <NavbarUserMenu

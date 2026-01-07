@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { useMetadataContext } from "../../contexts/MetadataContext";
+import { toast } from 'react-toastify';
 
 export const useSearch = () => {
     const [searchInput, setSearchInput] = useState("");
@@ -16,10 +17,15 @@ export const useSearch = () => {
 
     const handleSearch = useCallback(() => {
         const term = searchInput.trim();
+
+        if (!term) {
+            toast.error("Vui lòng nhập tên phim")
+            return;
+        }
         if (location.pathname !== "/") {
             navigate(`/?keyword=${encodeURIComponent(term)}`);
         } else {
-            setSearchParams(term ? { keyword: term } : {});
+            setSearchParams({ keyword: term });
         }
         [setSelectedGenre, setSelectedCountry, setSelectedType, setSelectedCategory].forEach(fn => fn(""));
         setSearchTerm(term);

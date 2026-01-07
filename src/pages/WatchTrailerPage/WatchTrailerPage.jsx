@@ -64,7 +64,7 @@ const WatchTrailerPage = () => {
                 onClick={handleBack}
                 className="absolute top-6 left-6 z-10 flex items-center gap-2 
                            bg-card-bg/60 hover:bg-red-600 hover:text-white text-text-main 
-                           px-4 py-2 rounded-lg transition-all duration-200 border border-border shadow-lg backdrop-blur-md"
+                           px-4 py-2 rounded-lg transition-all duration-200 border border-border shadow-lg backdrop-blur-md cursor-pointer"
             >
                 <FaArrowLeft className="w-4 h-4" />
                 <span className="font-medium">Quay lại</span>

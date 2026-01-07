@@ -14,7 +14,7 @@ const NavbarUserMenu = ({ userInfo, menuRef, openMenu, setOpenMenu, navigate, lo
         <div className="w-auto lg:w-28 flex justify-end items-center shrink-0">
             {!userInfo ? (
                 <button
-                    className="bg-red-600 px-4 py-2 rounded-md text-sm font-bold hover:bg-red-700 transition-all whitespace-nowrap"
+                    className="bg-red-600 text-text-muted px-4 py-2 rounded-md text-sm font-bold hover:bg-red-700 transition-all whitespace-nowrap"
                     onClick={() => navigate("/login")}
                 >
                     Đăng nhập

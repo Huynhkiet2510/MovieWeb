@@ -1,9 +1,9 @@
 const MovieDetailSkeleton = () => {
   return (
     <div className="animate-pulse">
-      <div className="relative w-full h-[600px] bg-card-skeleton/30" />
+      <div className="relative w-full h-[600px] bg-card-skeleton/30 " />
 
-      <div className="relative flex flex-col md:flex-row -mt-50 px-6 md:px-10 gap-6 z-20">
+      <div className="relative flex flex-col items-center md:items-start md:flex-row -mt-50 px-6 md:px-10 gap-6 z-20">
         <div className="w-[260px] h-[360px] bg-card-skeleton rounded-2xl shadow-xl shrink-0" />
 
         <div className="flex-1 bg-card-bg rounded-2xl p-6 md:p-10 space-y-5 border border-border">

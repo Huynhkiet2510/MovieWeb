@@ -24,7 +24,7 @@ const MainContent = ({ movie, duration, director, cast, selectedType, id, toggle
 
     return (
         <div className="relative flex flex-col md:flex-row -mt-50 px-6 md:px-10 gap-6 z-20 pb-10">
-            <div className="relative z-10 flex-shrink-0 flex justify-center md:w-autot">
+            <div className="relative z-10 flex-shrink-0 flex justify-center md:w-auto">
                 <img
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                     alt={movie.title || movie.name}

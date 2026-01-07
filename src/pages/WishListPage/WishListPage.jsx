@@ -18,7 +18,7 @@ const WishListPage = () => {
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-page-bg text-text-main transition-colors duration-300">
       <SideBar />
-      <div className="flex-1">
+      <section className="flex-1">
         <div className="p-6">
           <h2 className="font-bold text-2xl lg:text-3xl mb-6 text-center lg:text-left">Danh sách mong muốn</h2>
           {loading ? (
@@ -45,14 +45,14 @@ const WishListPage = () => {
             </div>
           )}
         </div>
-        <div className="mt-2 pb-10 min-h-[30px]">
+        <nav className="mt-2 pb-10 min-h-[30px]">
           <Pagination
             page={page}
             totalPages={totalPages}
             onPageChange={handlePageChange}
           />
-        </div>
-      </div>
+        </nav>
+      </section>
     </div>
   );
 };

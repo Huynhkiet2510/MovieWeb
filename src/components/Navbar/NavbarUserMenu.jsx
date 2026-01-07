@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { FaUser } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 
@@ -71,4 +72,4 @@ const NavbarUserMenu = ({ userInfo, menuRef, openMenu, setOpenMenu, navigate, lo
     );
 };
 
-export default NavbarUserMenu;
+export default memo(NavbarUserMenu);

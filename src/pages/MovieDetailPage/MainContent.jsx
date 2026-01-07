@@ -6,9 +6,25 @@ import Rating from "../../components/Rating/Rating";
 const MainContent = ({ movie, duration, director, cast, selectedType, id, toggleFavorite, isFavorite, toggleWatchList, isWatchList }) => {
     const navigate = useNavigate();
 
+    const infoData = [
+        { label: "Ngày phát hành", value: movie.release_date || movie.first_air_date },
+        {
+            label: "Điểm",
+            value: (
+                <span className="flex items-center gap-1 text-yellow-400">
+                    <FaStar /> {movie.vote_average?.toFixed(1)}
+                </span>
+            )
+        },
+        { label: "Thời lượng", value: duration },
+        { label: "Thể loại", value: movie?.genres?.map(g => g.name).join(", ") },
+        { label: "Đạo diễn", value: director },
+        { label: "Diễn viên", value: cast?.map(c => c.name).slice(0, 10).join(', ') },
+    ];
+
     return (
         <div className="relative flex flex-col md:flex-row -mt-50 px-6 md:px-10 gap-6 z-20 pb-10">
-            <div className="relative z-10 flex-shrink-0">
+            <div className="relative z-10 flex-shrink-0 flex justify-center md:w-autot">
                 <img
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                     alt={movie.title || movie.name}
@@ -18,15 +34,34 @@ const MainContent = ({ movie, duration, director, cast, selectedType, id, toggle
             </div>
 
             <div className="flex-1 bg-card-bg rounded-2xl p-6 md:pt-10 md:px-10 md:pb-0 shadow-md flex flex-col gap-6">
-                <h1 className="text-3xl md:text-4xl font-bold text-text-muted">{movie.title || movie.name}</h1>
-                <div className="space-y-3">
-                    <div className="flex gap-2 text-info-value"><span className="font-bold text-text-muted">Ngày phát hành:</span>{movie.release_date || movie.first_air_date}</div>
-                    <div className="flex gap-2 text-info-value"><span className="font-bold text-text-muted">Điểm:</span><span className="flex items-center gap-1 text-yellow-400"><FaStar /> {movie.vote_average}</span></div>
-                    <div className="flex gap-2 text-info-value"><span className="font-bold text-text-muted">Thời lượng:</span>{duration}</div>
-                    <div className="flex gap-2 text-info-value"><span className="font-bold text-text-muted">Thể loại:</span>{movie?.genres?.map(g => g.name).join(", ")}</div>
-                    <div className="flex gap-2 text-info-value"><span className="font-bold text-text-muted">Đạo diễn:</span>{director}</div>
-                    <div className="flex gap-2 text-info-value"><span className="font-bold text-text-muted">Diễn viên:</span>{cast.map(c => c.name).join(', ')}</div>
-                    <div className="text-info-value"><span className="font-bold text-text-muted">Giới thiệu:</span> {movie.overview}</div>
+                <h2 className="text-3xl md:text-4xl font-bold text-text-muted">{movie.title || movie.name}</h2>
+                <div className="mt-6 space-y-4">
+                    <div className="grid grid-cols gap-y-3">
+                        {infoData.map((item, index) => (
+                            <div
+                                key={index}
+                                className="grid grid-cols-[130px_1fr] items-start gap-2 text-sm md:text-base  pb-2 lg:border-none lg:pb-0"
+                            >
+                                <span className="font-bold text-info-label shrink-0">
+                                    {item.label}:
+                                </span>
+                                <span className="text-info-value leading-relaxed">
+                                    {item.value || "Đang cập nhật"}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="pt-4">
+                        <div className="grid grid-cols-1 lg:grid-cols-[130px_1fr] gap-x-3">
+                            <span className="font-bold text-info-label  shrink-0 mb-1 lg:mb-0">
+                                Giới thiệu:
+                            </span>
+                            <p className="text-info-value leading-relaxed text-justify">
+                                {movie.overview}
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
 

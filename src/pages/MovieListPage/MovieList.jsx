@@ -44,7 +44,7 @@ const MovieList = () => {
   });
 
   return (
-    <div className="text-center min-h-screen w-full px-5 bg-page-bg text-text-main transition-colors duration-300">
+    <section className="text-center min-h-screen w-full px-5 bg-page-bg text-text-main transition-colors duration-300">
       <h2 className="font-bold text-xl md:text-3xl tracking-tight pt-8 text-text-main">
         {title}
       </h2>
@@ -52,13 +52,13 @@ const MovieList = () => {
         {loading ? (
           Array(16).fill(0).map((_, i) => <MovieSkeleton key={i} />)
         ) : error ? (
-          <p className="col-span-full text-red-500 text-center font-medium">
+          <div className="col-span-full text-red-500 text-center font-medium">
             Không thể tải dữ liệu. Vui lòng thử lại!
-          </p>
+          </div>
         ) : listMovie.length === 0 ? (
-          <p className="col-span-full bg-card-bg border border-border max-w-sm text-center p-10 mt-8 mx-auto rounded-2xl text-sm text-text-muted transition-colors">
+          <div className="col-span-full bg-card-bg border border-border max-w-sm text-center p-10 mt-8 mx-auto rounded-2xl text-sm text-text-muted transition-colors">
             Không có phim nào
-          </p>
+          </div>
         ) : (
           listMovie.map(item => (
             <CartItem key={`${item.media_type}-${item.id}`} item={item} />
@@ -66,14 +66,14 @@ const MovieList = () => {
         )}
       </div>
 
-      <div className="mt-2 pb-10 min-h-[30px]">
+      <nav className="mt-2 pb-10 min-h-[30px]">
         <Pagination
           page={page}
           totalPages={totalPages}
           onPageChange={handlePageChange}
         />
-      </div>
-    </div>
+      </nav>
+    </section>
   );
 };
 

@@ -86,7 +86,7 @@ const Navbar = () => {
           onClick={handleLogoClick}
           className="font-bold text-2xl md:text-3xl tracking-tighter cursor-pointer text-red-600 shrink-0 hover:opacity-80"
         >
-          MovieApp
+          MovieZone
         </div>
 
         <div className="hidden sm:flex flex-1 max-w-[300px] lg:max-w-md items-center group">

@@ -18,9 +18,40 @@ export const getFavoriteList = (userId, type, sessionId, config = {}) => {
   );
 };
 
+export const postFavorite = (userId, type, type_id, isFavorite, sessionId, config = {}) => {
+  return api.post(
+    `/account/${userId}/favorite`,
+    {
+      media_type: type,
+      media_id: Number(type_id),
+      favorite: !isFavorite,
+    },
+    {
+      params: { session_id: sessionId },
+      ...config,
+    }
+  );
+};
+
+
 export const getWatchList = (userId, type, sessionId, config = {}) => {
   return api.get(
     `/account/${userId}/watchlist/${type}`,
+    {
+      params: { session_id: sessionId },
+      ...config,
+    }
+  );
+};
+
+export const postWatchList = (userId, type, type_id, isWatchList, sessionId, config = {}) => {
+  return api.post(
+    `/account/${userId}/watchlist`,
+    {
+      media_type: type,
+      media_id: Number(type_id),
+      watchlist: !isWatchList,
+    },
     {
       params: { session_id: sessionId },
       ...config,

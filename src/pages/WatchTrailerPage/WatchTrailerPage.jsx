@@ -84,7 +84,7 @@ const WatchTrailerPage = () => {
                     </div>
                 ) : noTrailer ? (
                     <div className="mt-10 sm:mt-0 bg-card-bg w-[90%] max-w-md text-center p-8 rounded-2xl shadow-xl border border-border">
-                        <div className="text-4xl mb-4">🎬</div>
+
                         <p className="text-text-main font-medium text-lg mb-2">Không tìm thấy trailer</p>
                         <button onClick={handleBack} className="mt-4 text-red-600 font-bold hover:underline">
                             Quay lại trang trước

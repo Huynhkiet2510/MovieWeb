@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { postFavorite, postWatchList } from "../../services/MovieDetailApi";
 
 export const useMovieActions = ({ media, id }) => {
   const favControllerRef = useRef(null);
@@ -24,21 +25,11 @@ export const useMovieActions = ({ media, id }) => {
     favControllerRef.current = controller;
 
     try {
-      const headers = {
-        Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-        accept: "application/json",
-        "Content-Type": "application/json",
-      };
 
-      await axios.post(
-        `https://api.themoviedb.org/3/account/${user.id}/favorite?session_id=${session_id}`,
+      await postFavorite(user.id, media, id, isFavorite, session_id, session_id,
         {
-          media_type: media,
-          media_id: Number(id),
-          favorite: !isFavorite,
-        },
-        { headers, signal: controller.signal }
-      );
+          signal: controller.signal
+        });
 
       setIsFavorite(prev => !prev);
       toast.success(!isFavorite ? "Đã thêm vào danh sách yêu thích" : "Đã xóa khỏi danh sách yêu thích");
@@ -62,21 +53,11 @@ export const useMovieActions = ({ media, id }) => {
     watchControllerRef.current = controller;
 
     try {
-      const headers = {
-        Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-        accept: "application/json",
-        "Content-Type": "application/json",
-      };
-
-      await axios.post(
-        `https://api.themoviedb.org/3/account/${user.id}/watchlist?session_id=${session_id}`,
+      await postWatchList(user.id, media, id, isWatchList, session_id,
         {
-          media_type: media,
-          media_id: Number(id),
-          watchlist: !isWatchList,
-        },
-        { headers, signal: controller.signal }
-      );
+          signal: controller.signal
+        }
+      )
 
       setIsWatchList(prev => !prev);
       toast.success(!isWatchList ? "Đã thêm vào danh sách xem sau" : "Đã xóa khỏi danh sách xem sau");

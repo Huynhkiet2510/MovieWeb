@@ -23,7 +23,6 @@ export const useFetchMovieDetail = (selectedType, id) => {
         toggleWatchList,
         setIsFavorite,
         setIsWatchList,
-        cleanup,
     } = useMovieActions({ media: selectedType, id });
 
     const user = useSelector((state) => state.auth.user);
@@ -104,12 +103,6 @@ export const useFetchMovieDetail = (selectedType, id) => {
         fetchUserLists();
         return () => controller.abort();
     }, [movie, user?.id, session_id, selectedType]);
-
-    useEffect(() => {
-        return () => cleanup();
-    }, []);
-
-
 
     return {
         movie, director, cast, error, loading, isFavorite, isWatchList, toggleFavorite, toggleWatchList

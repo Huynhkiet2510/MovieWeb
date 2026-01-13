@@ -28,25 +28,18 @@ const Navbar = () => {
     setOpenMobileMenu(false);
   });
 
-  const genreOptions = useMemo(
-    () =>
-      metadata.genres.map((g) => (
-        <option key={g.id} value={g.id}>
-          {g.name}
-        </option>
-      )),
-    [metadata.genres]
-  );
+  const genreOptions = metadata?.genres?.map((g) => (
+      <option key={g.id} value={g.id}>
+        {g.name}
+      </option>
+    ))
 
-  const countryOptions = useMemo(
-    () =>
-      metadata.countries.map((c) => (
-        <option key={c.iso_3166_1} value={c.iso_3166_1}>
-          {c.english_name}
-        </option>
-      )),
-    [metadata.countries]
-  );
+
+  const countryOptions = metadata?.countries?.map((c) => (
+      <option key={c.iso_3166_1} value={c.iso_3166_1}>
+        {c.english_name}
+      </option>
+    ))
 
   const linkProps = {
     genreOptions,

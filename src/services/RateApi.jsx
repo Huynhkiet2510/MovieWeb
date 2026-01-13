@@ -9,7 +9,7 @@ export const getRate = (type, id, sessionId, config = {}) => {
   });
 };
 
-export const postRate = (type, id, sessionId, value, config = {}) => {
+export const postRate = (type, id, sessionId, value) => {
   return api.post(
     `/${type}/${id}/rating`,
     {
@@ -17,9 +17,8 @@ export const postRate = (type, id, sessionId, value, config = {}) => {
     },
     {
       params: {
-        session_id: sessionId,
-      },
-      ...config,
+        session_id: sessionId
+      }
     }
   );
 };

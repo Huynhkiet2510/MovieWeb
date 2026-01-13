@@ -10,7 +10,7 @@ const Rating = () => {
     const [rating, setRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
     const { media, id } = useParams();
-    const rateControllerRef = useRef(null);
+
 
     const session_id = useSelector(state => state.auth.session_id)
 
@@ -40,17 +40,11 @@ const Rating = () => {
 
     const handleRate = async (value) => {
         if (!session_id) {
-            toast.error("Bạn cần đăng nhập TMDB để dùng tính năng Đánh giá");
+            toast.error("Bạn cần đăng nhập để dùng tính năng Đánh giá");
             return;
         }
-
-        rateControllerRef.current?.abort();
-        const controller = new AbortController();
-        rateControllerRef.current = controller;
-
         try {
-
-            await postRate(media, id, session_id, value, { signal: controller.signal });
+            await postRate(media, id, session_id, value);
             setRating(value);
             toast.success("Đánh giá thành công");
         } catch (error) {
@@ -58,10 +52,6 @@ const Rating = () => {
             toast.error("Đánh giá thất bại");
         }
     };
-
-    useEffect(() => {
-        return () => rateControllerRef.current?.abort();
-    }, []);
 
     return (
         <div className="flex items-center gap-1">

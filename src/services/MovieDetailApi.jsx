@@ -18,7 +18,7 @@ export const getFavoriteList = (userId, type, sessionId, config = {}) => {
   );
 };
 
-export const postFavorite = (userId, type, type_id, isFavorite, sessionId, config = {}) => {
+export const postFavorite = (userId, type, type_id, isFavorite, sessionId) => {
   return api.post(
     `/account/${userId}/favorite`,
     {
@@ -28,7 +28,6 @@ export const postFavorite = (userId, type, type_id, isFavorite, sessionId, confi
     },
     {
       params: { session_id: sessionId },
-      ...config,
     }
   );
 };
@@ -44,7 +43,7 @@ export const getWatchList = (userId, type, sessionId, config = {}) => {
   );
 };
 
-export const postWatchList = (userId, type, type_id, isWatchList, sessionId, config = {}) => {
+export const postWatchList = (userId, type, type_id, isWatchList, sessionId) => {
   return api.post(
     `/account/${userId}/watchlist`,
     {
@@ -54,7 +53,6 @@ export const postWatchList = (userId, type, type_id, isWatchList, sessionId, con
     },
     {
       params: { session_id: sessionId },
-      ...config,
     }
   );
 };

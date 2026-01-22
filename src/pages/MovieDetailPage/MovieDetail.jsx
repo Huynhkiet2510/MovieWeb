@@ -1,22 +1,26 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
 import MainContent from "./MainContent";
 import MovieDetailSkeleton from "../../components/MovieDetailSkeleton/MovieDetailSkeleton";
+import ErrorState from "../../components/ErrorState/ErrorState";
+import { useNavigate, useParams } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 import { useFetchMovieDetail } from "./useFetchMovieDetail"
 import { formatDuration } from "../../utils/formatDuration";
+
 
 const MovieDetail = () => {
   const { media: selectedType, id } = useParams();
   const navigate = useNavigate();
-  const { movie, director, cast, error, loading, isFavorite, isWatchList, toggleFavorite, toggleWatchList } = useFetchMovieDetail(selectedType, id);
+  const { movie, director, cast, error, loading, isFavorite, isWatchList, toggleFavorite, toggleWatchList, fetchDetail } = useFetchMovieDetail(selectedType, id);
 
   const duration = formatDuration(selectedType, movie);
 
   if (error) {
     return (
-      <div className="text-red-500 p-10 text-center">
-        Lỗi khi tải dữ liệu!
-      </div>
+      <ErrorState
+        title="Không tải được thông tin của Phim rồi =((("
+        message="Tôi vừa chia tay bạn gái xong thì bạn đừng mong đc xem phim đâu!!!!"
+        onRetry={() => fetchDetail()}
+      />
     );
   }
 

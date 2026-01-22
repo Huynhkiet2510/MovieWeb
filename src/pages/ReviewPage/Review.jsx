@@ -1,7 +1,8 @@
 import { useSearchParams } from "react-router-dom";
 import { FaStar, FaComment } from "react-icons/fa";
-import Pagination from "../../components/Pagination/Pagination";
 import { useFetchReview } from "./useFetchReview"
+import Pagination from "../../components/Pagination/Pagination";
+import SmallErrorState from "../../components/ErrorState/SmallErrorState"
 
 const Review = ({ media, id }) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -13,6 +14,15 @@ const Review = ({ media, id }) => {
     setSearchParams({ page: newPage })
   };
 
+  if (error) {
+    return (
+      <SmallErrorState
+        message="Đang có lỗi không thể tải được đánh giá!!!!"
+        onRetry={() => window.location.reload()}
+      />
+    );
+  }
+
   return (
     <div className="mt-8 text-text-muted">
       <div className="mb-8">
@@ -21,8 +31,6 @@ const Review = ({ media, id }) => {
           <>
             <div className="bg-review-skeleton w-full h-32 animate-pulse rounded-2xl" />
           </>
-        ) : error ? (
-          <p className="text-red-500 text-center">Lỗi tải đánh giá!</p>
         ) : reviews.length === 0 ? (
           <p className="bg-page-bg w-full text-center p-10 rounded-2xl text-sm text-text-muted">Không có đánh giá nào.</p>
         ) : (
@@ -56,7 +64,7 @@ const Review = ({ media, id }) => {
         )}
       </div>
 
-      {reviews.length > 0 && (
+      {!loading && reviews.length > 0 && (
         <nav>
           <Pagination
             page={page}

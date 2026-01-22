@@ -57,9 +57,9 @@ const NotificationPage = () => {
         setNotifications(notifications.map(n => n.id === id ? { ...n, isRead: true } : n));
     };
 
+
     return (
         <div className='bg-page-bg flex flex-col lg:flex-row min-h-screen text-text-main transition-colors duration-300'>
-            <SideBar />
             <div className='flex-1 p-4 lg:p-8'>
                 <div className='flex flex-col sm:flex-row justify-between items-center mb-6 lg:mb-8 gap-4'>
                     <h2 className="font-bold text-2xl lg:text-3xl">Thông báo của bạn</h2>

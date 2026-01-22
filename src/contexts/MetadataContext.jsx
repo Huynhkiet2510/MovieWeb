@@ -20,8 +20,8 @@ export const MetadataProvider = ({ children }) => {
                 const [genreRes, countryRes] = await getGenreAndCountry({
                     signal: controller.signal,
                 });
-                setGenres(genreRes.data.genres.slice(0, 10) || []);
-                setCountries(countryRes.data.slice(0, 10) || []);
+                setGenres(genreRes.data.genres.slice(0, 15) || []);
+                setCountries(countryRes.data.slice(0, 15) || []);
             } catch (error) {
                 if (axios.isCancel(error)) return;
                 console.error(error);

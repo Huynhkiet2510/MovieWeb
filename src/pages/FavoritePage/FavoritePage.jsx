@@ -1,9 +1,9 @@
 import CartItem from "../../components/CartItem/CartItem";
-import SideBar from "../../components/SideBar/SideBar";
 import MovieSkeleton from "../../components/MovieSkeleton/MovieSkeleton";
+import Pagination from "../../components/Pagination/Pagination";
+import ErrorState from "../../components/ErrorState/ErrorState"
 import { useFetchFavorite } from "./useFetchFavorite";
 import { useSearchParams } from "react-router-dom";
-import Pagination from "../../components/Pagination/Pagination";
 
 const FavoritePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,10 +15,19 @@ const FavoritePage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  if (error) {
+    return (
+      <ErrorState
+        title="Không thể tải được danh sách phim yêu thích =((("
+        message="Tôi vừa chia tay bạn gái xong thì bạn đừng mong đc xem phim đâu!!!!"
+        onRetry={() => window.location.reload()}
+      />
+    );
+  }
+
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-page-bg text-text-main transition-colors duration-300">
-      <SideBar />
-      <section className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col">
         <div className="p-4 lg:p-8">
           <h2 className="font-bold text-2xl lg:text-3xl mb-6 text-center lg:text-left">
             Danh sách yêu thích
@@ -28,12 +37,6 @@ const FavoritePage = () => {
               {Array(12).fill(0).map((_, i) => (
                 <MovieSkeleton key={i} />
               ))}
-            </div>
-          ) : error ? (
-            <div className="flex justify-center items-center h-64">
-              <p className="text-red-500 bg-red-500/10 px-4 py-2 rounded-lg">
-                Không thể tải dữ liệu. Vui lòng thử lại!
-              </p>
             </div>
           ) : favoriteList.length === 0 ? (
             <div className="flex justify-center items-center h-64">
@@ -60,7 +63,7 @@ const FavoritePage = () => {
             onPageChange={handlePageChange}
           />
         </nav>
-      </section>
+      </div>
     </div>
   );
 };

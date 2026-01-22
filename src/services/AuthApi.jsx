@@ -8,9 +8,9 @@ export const createSession = (request_token, config = {}) => {
   );
 };
 
-export const getAccount = (session_id, config = {}) => {
+export const getAccount = (sessionId, config = {}) => {
   return api.get(
-    `/account?session_id=${session_id}`,
+    `/account?session_id=${sessionId}`,
     config
   );
 };

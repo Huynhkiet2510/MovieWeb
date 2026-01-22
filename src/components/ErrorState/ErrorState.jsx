@@ -1,6 +1,7 @@
-
+import { Link } from "react-router-dom";
 
 const ErrorState = ({ title, message, onRetry }) => {
+
     return (
         <div className="bg-page-bg min-h-[60vh] flex flex-col items-center justify-center p-5 text-center animate-fadeIn">
             <div className="relative mb-8">
@@ -23,13 +24,12 @@ const ErrorState = ({ title, message, onRetry }) => {
                     Thử lại ngay
                 </button>
 
-                <a
-                    href="/"
+                <Link
+                    to="/"
                     className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 border-2 border-gray-200 text-text-muted rounded-2xl font-bold hover:bg-gray-500 transition-all active:scale-95"
                 >
-
                     Về trang chủ
-                </a>
+                </Link>
             </div>
         </div>
     );

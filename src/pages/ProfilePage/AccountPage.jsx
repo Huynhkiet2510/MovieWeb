@@ -9,7 +9,7 @@ const AccountPage = () => {
   const mode = useSelector((state) => state.theme.mode);
   const dispatch = useDispatch();
 
-  
+
   if (!user)
     return (
       <div className="flex justify-center items-center min-h-screen bg-page-bg text-text-main">
@@ -19,8 +19,7 @@ const AccountPage = () => {
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-page-bg text-text-main transition-colors duration-300">
-      <SideBar />
-      <main className="flex-1 p-4 lg:p-10">
+      <div className="flex-1 p-4 lg:p-10">
         <div className="text-center lg:text-left mb-8">
           <h2 className="font-bold text-3xl lg:text-4xl mb-2">Tài khoản</h2>
           <p className="text-text-muted">Cập nhật thông tin tài khoản của bạn</p>
@@ -147,7 +146,7 @@ const AccountPage = () => {
           </div>
 
         </div>
-      </main>
+      </div>
     </div>
   );
 };

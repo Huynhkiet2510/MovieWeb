@@ -12,7 +12,7 @@ export const getFavoriteList = (userId, type, sessionId, config = {}) => {
   return api.get(
     `/account/${userId}/favorite/${type}`,
     {
-      params: { session_id: sessionId },
+      params: { sessionId },
       ...config,
     }
   );
@@ -27,7 +27,7 @@ export const postFavorite = (userId, type, type_id, isFavorite, sessionId) => {
       favorite: !isFavorite,
     },
     {
-      params: { session_id: sessionId },
+      params: { sessionId },
     }
   );
 };
@@ -37,7 +37,7 @@ export const getWatchList = (userId, type, sessionId, config = {}) => {
   return api.get(
     `/account/${userId}/watchlist/${type}`,
     {
-      params: { session_id: sessionId },
+      params: { sessionId },
       ...config,
     }
   );
@@ -52,7 +52,7 @@ export const postWatchList = (userId, type, type_id, isWatchList, sessionId) => 
       watchlist: !isWatchList,
     },
     {
-      params: { session_id: sessionId },
+      params: { sessionId },
     }
   );
 };

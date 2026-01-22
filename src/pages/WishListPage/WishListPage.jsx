@@ -4,6 +4,7 @@ import MovieSkeleton from "../../components/MovieSkeleton/MovieSkeleton";
 import { useFetchWishList } from "./useFetchWishList"
 import Pagination from "../../components/Pagination/Pagination";
 import { useSearchParams } from "react-router-dom";
+import ErrorState from "../../components/ErrorState/ErrorState"
 
 const WishListPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,10 +16,19 @@ const WishListPage = () => {
     window.scrollTo(0, 0);
   };
 
+  if (error) {
+    return (
+      <ErrorState
+        title="Không thể tải được danh sách phim mong muốn =((("
+        message="Tôi vừa chia tay bạn gái xong thì bạn đừng mong đc xem phim đâu!!!!"
+        onRetry={() => window.location.reload()}
+      />
+    );
+  }
+
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-page-bg text-text-main transition-colors duration-300">
-      <SideBar />
-      <section className="flex-1">
+      <div className="flex-1">
         <div className="p-6">
           <h2 className="font-bold text-2xl lg:text-3xl mb-6 text-center lg:text-left">Danh sách mong muốn</h2>
           {loading ? (
@@ -29,10 +39,6 @@ const WishListPage = () => {
                   <MovieSkeleton key={i} />
                 ))}
             </div>
-          ) : error ? (
-            <p className="text-red-500 text-center">
-              Không thể tải dữ liệu. Vui lòng thử lại!
-            </p>
           ) : wishList.length === 0 ? (
             <p className="bg-[#14161D] w-full text-center p-10 rounded-2xl text-sm text-gray-400">
               Bạn không có phim nào trong danh sách.
@@ -52,7 +58,7 @@ const WishListPage = () => {
             onPageChange={handlePageChange}
           />
         </nav>
-      </section>
+      </div>
     </div>
   );
 };

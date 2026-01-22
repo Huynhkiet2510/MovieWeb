@@ -2,19 +2,20 @@ import { useEffect, useState } from "react";
 import getReview from "../../services/ReviewApi"
 import axios from "axios";
 
-export const useFetchReview = ({media, id, page = 1}) => { 
+export const useFetchReview = ({ media, id, page = 1 }) => {
     const [reviews, setReviews] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
-    const [loading, setLoading] = useState(false); 
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         if (!id || !media) return;
 
         const controller = new AbortController();
-        
+
         const fetchReview = async () => {
             setLoading(true);
+            setError(null);
             try {
                 const res = await getReview(media, id, {
                     params: { page },

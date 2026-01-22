@@ -28,48 +28,41 @@ export const useFetchMovieDetail = (selectedType, id) => {
     const user = useSelector((state) => state.auth.user);
     const session_id = useSelector((state) => state.auth.session_id);
 
+    const fetchDetail = async (signal) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const detailRes = await getDetail(selectedType, id, { signal });
+
+            setMovie(detailRes.data);
+
+            const creditsRes = await getCredits(selectedType, id, { signal });
+
+            if (selectedType === "movie") {
+                const crew = creditsRes.data.crew || [];
+                const castList = creditsRes.data.cast || [];
+                const directorInfo = crew.find((c) => c.job === "Director");
+
+                setDirector(directorInfo?.name || "Không rõ");
+                setCast(castList.slice(0, 5));
+            } else {
+                setDirector(
+                    detailRes.data.created_by?.map((c) => c.name).join(", ") ||
+                    "Không rõ"
+                );
+                setCast((creditsRes.data.cast || []).slice(0, 5));
+            }
+        } catch (err) {
+            if (axios.isCancel(err)) return;
+            setError(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         const controller = new AbortController();
-
-        const fetchDetail = async () => {
-            try {
-                setLoading(true);
-
-                const detailRes = await getDetail(selectedType, id, {
-                    signal: controller.signal,
-                });
-
-                setMovie(detailRes.data);
-
-                const creditsRes = await getCredits(selectedType, id, {
-                    signal: controller.signal,
-                });
-
-                if (selectedType === "movie") {
-                    const crew = creditsRes.data.crew || [];
-                    const castList = creditsRes.data.cast || [];
-                    const directorInfo = crew.find((c) => c.job === "Director");
-
-                    setDirector(directorInfo?.name || "Không rõ");
-                    setCast(castList.slice(0, 5));
-                } else {
-                    setDirector(
-                        detailRes.data.created_by?.map((c) => c.name).join(", ") ||
-                        "Không rõ"
-                    );
-                    setCast((creditsRes.data.cast || []).slice(0, 5));
-                }
-            } catch (err) {
-                if (err.name !== "CanceledError") {
-                    console.error("Lỗi khi fetch detail:", err);
-                    setError(err);
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchDetail();
+        fetchDetail(controller.signal);
         return () => controller.abort();
     }, [id, selectedType]);
 
@@ -105,6 +98,6 @@ export const useFetchMovieDetail = (selectedType, id) => {
     }, [movie, user?.id, session_id, selectedType]);
 
     return {
-        movie, director, cast, error, loading, isFavorite, isWatchList, toggleFavorite, toggleWatchList
+        movie, director, cast, error, loading, isFavorite, isWatchList, toggleFavorite, toggleWatchList, fetchDetail
     }
 }

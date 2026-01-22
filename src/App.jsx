@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
+import AccountLayout from "./components/Layout/AccountLayout";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import MovieListPage from "./pages/MovieListPage/MovieList";
 import MovieDetail from "./pages/MovieDetailPage/MovieDetail";
@@ -13,9 +14,9 @@ import RequireGuest from "./routes/RequireGuest";
 import NotificationPage from "./pages/NotificationPage/NotificationPage";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop"
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -58,22 +59,14 @@ function App() {
 
         <Route element={<Layout />} >
           <Route path="/" element={<MovieListPage />} />
-          <Route path="/favorite" element={
-            <RequireAuth>
-              <FavoritePage />
-            </RequireAuth>} />
-          <Route path="/wishlist" element={
-            <RequireAuth>
-              <WishListPage />
-            </RequireAuth>} />
-          <Route path="/notification" element={
-            <RequireAuth>
-              <NotificationPage />
-            </RequireAuth>} />
-          <Route path="/profile" element={
-            <RequireAuth>
-              <ProfilePage />
-            </RequireAuth>} />
+
+          <Route element={<RequireAuth><AccountLayout /></RequireAuth>}>
+            <Route path="/favorite" element={<FavoritePage />} />
+            <Route path="/wishlist" element={<WishListPage />} />
+            <Route path="/notification" element={<NotificationPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+          </Route>
+
           <Route path="/:media/:id" element={<MovieDetail />} />
           <Route path="/watch/:media/:id" element={<WatchTrailerPage />} />
         </Route>

@@ -16,7 +16,7 @@ const SideBar = () => {
     ];
 
     return (
-        <aside className="bg-card-bg border border-border w-full lg:h-180 lg:w-[300px] p-6 lg:p-10 lg:m-5 rounded-none lg:rounded-2xl transition-all duration-300 shadow-sm">
+        <aside className="bg-card-bg border border-border w-full lg:h-screen lg:w-[300px] p-6 lg:p-10 lg:m-5 rounded-none lg:rounded-2xl transition-all duration-300 shadow-sm">
             <h2 className="font-bold text-lg mb-6 hidden lg:block text-text-main">
                 Quản Lý Tài Khoản
             </h2>

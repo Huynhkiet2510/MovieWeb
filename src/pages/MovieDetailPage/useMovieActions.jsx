@@ -1,13 +1,10 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { postFavorite, postWatchList } from "../../services/MovieDetailApi";
 
 export const useMovieActions = ({ media, id }) => {
-  const favControllerRef = useRef(null);
-  const watchControllerRef = useRef(null);
-
   const user = useSelector(state => state.auth.user);
   const session_id = useSelector(state => state.auth.session_id);
 

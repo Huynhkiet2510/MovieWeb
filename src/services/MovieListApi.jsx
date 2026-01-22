@@ -2,7 +2,7 @@ import api from "./axiosClient";
 
 export const getFavoriteList = (userId, type, sessionId, config = {}) => {
   return api.get(`/account/${userId}/favorite/${type}`, {
-    params: { session_id: sessionId },
+    params: { sessionId },
     ...config,
   });
 };
@@ -10,11 +10,11 @@ export const getFavoriteList = (userId, type, sessionId, config = {}) => {
 export const getFavoriteMulti = (userId, sessionId, config = {}) => {
   return Promise.all([
     api.get(`/account/${userId}/favorite/movies`, {
-      params: { session_id: sessionId },
+      params: { sessionId },
       ...config,
     }),
     api.get(`/account/${userId}/favorite/tv`, {
-      params: { session_id: sessionId },
+      params: { sessionId },
       ...config,
     }),
   ]);
@@ -23,11 +23,11 @@ export const getFavoriteMulti = (userId, sessionId, config = {}) => {
 export const getWishlistMulti = (userId, sessionId, config = {}) => {
   return Promise.all([
     api.get(`/account/${userId}/watchlist/movies`, {
-      params: { session_id: sessionId },
+      params: { sessionId },
       ...config,
     }),
     api.get(`/account/${userId}/watchlist/tv`, {
-      params: { session_id: sessionId },
+      params: { sessionId },
       ...config,
     }),
   ]);

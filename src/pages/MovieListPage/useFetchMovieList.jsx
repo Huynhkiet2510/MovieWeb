@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { mergeResult } from "../../utils/mergeResult"
 import {
     searchMulti,
@@ -47,14 +47,11 @@ export const useFetchMovieList = ({ page, searchTerm, selectedGenre, selectedCou
         };
     };
 
-    useEffect(() => {
-        const controller = new AbortController();
-
-        const fetchData = async () => {
+    const fetchData = async (signal) => {
             setLoading(true);
             setError(null);
             try {
-                const res = await fetchCombined(controller.signal);
+                const res = await fetchCombined(signal);
                 setListMovie(res.results);
                 setTotalPages(res.totalPages);
             } catch (err) {
@@ -67,15 +64,18 @@ export const useFetchMovieList = ({ page, searchTerm, selectedGenre, selectedCou
             }
         };
 
-        fetchData();
+    useEffect(() => {
+        const controller = new AbortController();
+        fetchData(controller.signal);
         return () => controller.abort()
     }, [searchTerm, selectedGenre, selectedCountry, selectedType, selectedCategory, page]);
+
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [page, searchTerm, selectedGenre, selectedCountry, selectedType]);
 
     return {
-        page, genres, countries, listMovie, totalPages, loading, error, selectedGenre, selectedCountry, selectedType, selectedCategory
+        page, genres, countries, listMovie, totalPages, loading, error, selectedGenre, selectedCountry, selectedType, selectedCategory, fetchData
     }
 }

@@ -14,10 +14,9 @@ const CartItem = ({ item }) => {
         >
             <div className="relative">
                 <ImageWithFallback
-                    src={item.poster_path && `https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                    src={item.poster_path && `https://image.tmdb.org/t/p/w342${item.poster_path}`}
                     className="h-70 w-full object-cover"
                     alt={item.display_title}
-                    loading="lazy"
                 />
 
                 <h3 className="flex items-center w-full p-2 text-text-main font-medium">

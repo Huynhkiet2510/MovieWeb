@@ -48,21 +48,21 @@ export const useFetchMovieList = ({ page, searchTerm, selectedGenre, selectedCou
     };
 
     const fetchData = async (signal) => {
-            setLoading(true);
-            setError(null);
-            try {
-                const res = await fetchCombined(signal);
-                setListMovie(res.results);
-                setTotalPages(res.totalPages);
-            } catch (err) {
-                if (axios.isCancel(err)) return;
-                setError(err);
-                setListMovie([]);
-                setTotalPages(1);
-            } finally {
-                setLoading(false);
-            }
-        };
+        setLoading(true);
+        setError(null);
+        try {
+            const res = await fetchCombined(signal);
+            setListMovie(res.results);
+            setTotalPages(Math.min(res.totalPages, 500));
+        } catch (err) {
+            if (axios.isCancel(err)) return;
+            setError(err);
+            setListMovie([]);
+            setTotalPages(1);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         const controller = new AbortController();

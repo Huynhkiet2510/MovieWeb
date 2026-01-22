@@ -9,12 +9,12 @@ import { useMetadataContext } from "../../contexts/MetadataContext";
 import { memo } from "react";
 
 const MovieList = () => {
-  const { genres, countries, selectedGenre, selectedCountry, selectedType, selectedCategory, searchTerm, fetchData } = useMetadataContext();
+  const { genres, countries, selectedGenre, selectedCountry, selectedType, selectedCategory, searchTerm } = useMetadataContext();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
 
-  const { listMovie, totalPages, loading, error } = useFetchMovieList({
+  const { listMovie, totalPages, loading, error, fetchData } = useFetchMovieList({
     searchTerm,
     selectedGenre,
     selectedCountry,

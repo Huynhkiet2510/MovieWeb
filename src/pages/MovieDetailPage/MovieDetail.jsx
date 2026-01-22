@@ -1,6 +1,7 @@
 import MainContent from "./MainContent";
 import MovieDetailSkeleton from "../../components/MovieDetailSkeleton/MovieDetailSkeleton";
 import ErrorState from "../../components/ErrorState/ErrorState";
+import ImageWithFallback from "../../components/ImageWithFallback/ImageWithFallback"
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import { useFetchMovieDetail } from "./useFetchMovieDetail"
@@ -37,9 +38,12 @@ const MovieDetail = () => {
       ) : (
         <>
           <div className="relative w-full h-[600px]">
-            <img
-              src={`https://image.tmdb.org/t/p/original${movie.backdrop_path || movie.poster_path
-                }`}
+            <ImageWithFallback
+              src={
+                (movie.backdrop_path || movie.poster_path)
+                  ? `https://image.tmdb.org/t/p/original${movie.backdrop_path || movie.poster_path}`
+                  : null
+              }
               alt={movie.title || movie.name}
               className="w-full h-full object-cover object-top"
             />

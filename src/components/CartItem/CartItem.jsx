@@ -1,6 +1,7 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaFilm, FaTv } from "react-icons/fa";
+import ImageWithFallback from "../ImageWithFallback/ImageWithFallback"
 
 const CartItem = ({ item }) => {
     const navigate = useNavigate();
@@ -12,9 +13,9 @@ const CartItem = ({ item }) => {
             key={item.media_type + item.id}
         >
             <div className="relative">
-                <img
+                <ImageWithFallback
+                    src={item.poster_path && `https://image.tmdb.org/t/p/w500${item.poster_path}`}
                     className="h-70 w-full object-cover"
-                    src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
                     alt={item.display_title}
                     loading="lazy"
                 />

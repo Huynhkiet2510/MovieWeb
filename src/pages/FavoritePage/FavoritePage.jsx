@@ -1,104 +1,68 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import CartItem from "../../components/CartItem/CartItem";
-import SideBar from "../../components/SideBar/SideBar";
 import MovieSkeleton from "../../components/MovieSkeleton/MovieSkeleton";
+import Pagination from "../../components/Pagination/Pagination";
+import ErrorState from "../../components/ErrorState/ErrorState"
+import { useFetchFavorite } from "./useFetchFavorite";
+import { useSearchParams } from "react-router-dom";
 
 const FavoritePage = () => {
-  const [favoriteList, setFavoriteList] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+  const { favoriteList, loading, error, totalPages } = useFetchFavorite(page);
 
-  const user = useSelector(state => state.auth.user);
-  const session_id = useSelector(state => state.auth.session_id);
+  const handlePageChange = (newPage) => {
+    setSearchParams({ page: newPage });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
-  useEffect(() => {
-    if (!user?.id || !session_id) return;
-
-    const controller = new AbortController();
-
-    const fetchFavoriteList = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const headers = {
-          Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-          accept: "application/json",
-        };
-
-        const [movieRes, tvRes] = await Promise.all([
-          axios.get(
-            `${import.meta.env.VITE_BASE}/account/${user.id}/favorite/movies?session_id=${session_id}`,
-            { signal: controller.signal, headers }
-          ),
-          axios.get(
-            `${import.meta.env.VITE_BASE}/account/${user.id}/favorite/tv?session_id=${session_id}`,
-            { signal: controller.signal, headers }
-          ),
-        ]);
-
-        const merged = [
-          ...movieRes.data.results.map(item => ({
-            ...item,
-            media_type: "movie",
-            display_title: item.title,
-          })),
-          ...tvRes.data.results.map(item => ({
-            ...item,
-            media_type: "tv",
-            display_title: item.name,
-          })),
-        ];
-
-        setFavoriteList(merged);
-      } catch (err) {
-        if (!axios.isCancel(err)) {
-          console.error(err);
-          setError(err);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFavoriteList();
-    return () => controller.abort();
-  }, [user?.id, session_id]);
+  if (error) {
+    return (
+      <ErrorState
+        title="Không thể tải được danh sách phim yêu thích =((("
+        message="Tôi vừa chia tay bạn gái xong thì bạn đừng mong đc xem phim đâu!!!!"
+        onRetry={() => window.location.reload()}
+      />
+    );
+  }
 
   return (
-    <div className="flex min-h-screen">
-      <SideBar />
-
-      <div className="flex-1 p-6">
-        <h2 className="font-bold text-3xl mb-6">Danh sách yêu thích</h2>
-        {loading ? (
-          <div className="grid grid-cols-6 gap-4">
-            {Array(12)
-              .fill(0)
-              .map((_, i) => (
+    <div className="flex flex-col lg:flex-row min-h-screen bg-page-bg text-text-main transition-colors duration-300">
+      <div className="flex-1 flex flex-col">
+        <div className="p-4 lg:p-8">
+          <h2 className="font-bold text-2xl lg:text-3xl mb-6 text-center lg:text-left">
+            Danh sách yêu thích
+          </h2>
+          {loading ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {Array(12).fill(0).map((_, i) => (
                 <MovieSkeleton key={i} />
               ))}
-          </div>
-        ) : error ? (
-          <p className="text-red-500 text-center">
-            Không thể tải dữ liệu. Vui lòng thử lại!
-          </p>
-        ) : favoriteList.length === 0 ? (
-          <p className="bg-[#14161D] w-full text-center p-10 rounded-2xl text-sm text-gray-400">
-            Bạn không có phim yêu thích.
-          </p>
-        ) : (
-          <div className="grid grid-cols-6 gap-4">
-            {favoriteList.map(item => (
-              <CartItem
-                key={`${item.media_type}-${item.id}`}
-                item={item}
-              />
-            ))}
-          </div>
-        )}
+            </div>
+          ) : favoriteList.length === 0 ? (
+            <div className="flex justify-center items-center h-64">
+              <p className="bg-[#25272F] w-full max-w-2xl text-center p-10 rounded-2xl text-sm text-gray-400">
+                Bạn không có phim yêu thích.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {favoriteList.map(item => (
+                <CartItem
+                  key={`${item.media_type}-${item.id}`}
+                  item={item}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        <nav className="mt-2 pb-10 min-h-[30px]">
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </nav>
       </div>
     </div>
   );

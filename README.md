@@ -1,16 +1,84 @@
-# React + Vite
+# Movie Web – React + TMDB API
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fully responsive movie web application built with **ReactJS**, powered by **The Movie Database (TMDB) API**.  
+This project simulates a real-world movie platform, focusing on clean UI/UX, state management, API integration, and user interactions such as favorites, wishlist, and ratings.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Live Demo
+(https://movie-web-yzeh.vercel.app) 
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+### Movie Browsing
+- Display movie list from TMDB API
+- Popular movies
+- Trending movies
+- Top-rated movies
+- Movies & TV series
+- Filter movies by:
+  - Genre
+  - Country
+  - Category
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Movie Detail
+- Movie details (poster, overview, genres, release date, rating)
+- Watch trailer (YouTube embed)
+- View movie reviews
+- Rate movie using star rating
+
+### User Interaction
+- Add / Remove movies from Favorites
+- Add / Remove movies from Wishlist
+- View:
+  - Favorite movies list
+  - Wishlist movies list
+
+### Profile & Notification
+- Profile page (read-only user information)
+- Notification page (static mock data for UI demonstration)
+
+### UI / UX
+- Light / Dark theme toggle
+- Fully responsive (desktop, tablet, mobile)
+- Skeleton loading for better user experience
+- Clean and modern UI
+
+---
+
+## Tech Stack
+
+### Front-end
+- **ReactJS**
+- **React Router**
+- **Redux Toolkit**
+- **Axios**
+- **React Icons**
+
+### Styling
+- CSS / SCSS (or Tailwind CSS if applicable)
+- Responsive layout
+- Dark / Light theme support
+
+### API
+- **TMDB (The Movie Database) API**
+
+---
+
+## Installation & Run Locally
+
+```bash
+# Clone repository
+git clone https://github.com/Huynhkiet2510/MovieWeb.git
+
+# Move into project directory
+cd MovieWeb
+
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+```

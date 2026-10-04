@@ -9,7 +9,7 @@ const CartItem = ({ item }) => {
     return (
         <div
             onClick={() => navigate(`/${item.media_type}/${item.id}`)}
-            className="bg-card-bg border border-border rounded-lg overflow-hidden hover:scale-105 transition-all duration-300 cursor-pointer shadow-lg group"
+            className="bg-card-bg border border-color-border-custom rounded-lg overflow-hidden hover:scale-105 transition-all duration-300 cursor-pointer shadow-lg group"
             key={item.media_type + item.id}
         >
             <div className="relative">

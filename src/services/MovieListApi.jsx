@@ -2,20 +2,20 @@ import api from "./axiosClient";
 
 export const getFavoriteList = (userId, type, sessionId, config = {}) => {
   return api.get(`/account/${userId}/favorite/${type}`, {
-    params: { sessionId },
     ...config,
+    params: { sessionId }
   });
 };
 
 export const getFavoriteMulti = (userId, sessionId, config = {}) => {
   return Promise.all([
     api.get(`/account/${userId}/favorite/movies`, {
-      params: { sessionId },
       ...config,
+      params: { sessionId }
     }),
     api.get(`/account/${userId}/favorite/tv`, {
-      params: { sessionId },
       ...config,
+      params: { sessionId }
     }),
   ]);
 };
@@ -23,12 +23,12 @@ export const getFavoriteMulti = (userId, sessionId, config = {}) => {
 export const getWishlistMulti = (userId, sessionId, config = {}) => {
   return Promise.all([
     api.get(`/account/${userId}/watchlist/movies`, {
-      params: { sessionId },
       ...config,
+      params: { sessionId }
     }),
     api.get(`/account/${userId}/watchlist/tv`, {
-      params: { sessionId },
       ...config,
+      params: { sessionId }
     }),
   ]);
 };
@@ -36,12 +36,12 @@ export const getWishlistMulti = (userId, sessionId, config = {}) => {
 export const searchMulti = (query, page, config = {}) => {
   return Promise.all([
     api.get("/search/movie", {
-      params: { query, page },
       ...config,
+      params: { query, page }
     }),
     api.get("/search/tv", {
-      params: { query, page },
       ...config,
+      params: { query, page }
     }),
   ]);
 };
@@ -54,39 +54,39 @@ export const discoverMulti = ({ genre, country, page }, config = {}) => {
   };
 
   return Promise.all([
-    api.get("/discover/movie", { params, ...config }),
-    api.get("/discover/tv", { params, ...config }),
+    api.get("/discover/movie", { ...config, params }),
+    api.get("/discover/tv", { ...config, params }),
   ]);
 };
 
 export const getTrending = (page, config = {}) =>
   Promise.all([
     api.get("/trending/movie/day", {
-      params: { page },
       ...config,
+      params: { page }
     }),
     api.get("/trending/tv/day", {
-      params: { page },
       ...config,
+      params: { page }
     }),
   ]);
 
 export const getTopRated = (page, config = {}) =>
   Promise.all([
     api.get("/movie/top_rated", {
-      params: { page },
       ...config,
+      params: { page }
     }),
     api.get("/tv/top_rated", {
-      params: { page },
       ...config,
+      params: { page }
     }),
   ]);
 
 export const getPopular = (type, page, config = {}) =>
   api.get(`/${type}/popular`, {
-    params: { page },
     ...config,
+    params: { page }
   });
 
 export const getDetail = (type, id, config = {}) => {

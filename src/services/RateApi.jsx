@@ -2,8 +2,8 @@ import api from "../services/axiosClient";
 
 export const getRate = (type, id, sessionId, config = {}) => {
   return api.get(`/${type}/${id}/account_states`, {
-    params: { sessionId },
     ...config,
+    params: { sessionId }
   });
 };
 

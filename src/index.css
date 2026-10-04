@@ -5,7 +5,7 @@
   --color-card-bg: #f1f5f9;
   --color-border: #e5e7eb;
   --color-text-main: #2D2D30;
-  --color-text-muted: #2D2D30;
+  --color-text-muted: #6B7280;
   --color-card-skeleton: #d1d5db;
   --color-navbar: #f1f5f9;
   --color-input-search: #E2E4F0;
@@ -15,7 +15,7 @@
   --color-card-skeleton: #D1D5DB;
   --color-review-skeleton: #E2E4F0;
   --color-nav-icon: #2D2D30;
-   --color-nav-icon-hover: #9ca3af;
+  --color-nav-icon-hover: #9ca3af;
 }
 
 @variant dark (&:where(.dark, .dark *));
@@ -23,7 +23,7 @@
 .dark {
   --color-page-bg: #191B24;
   --color-card-bg: #1f2028;
-  --color-border: #2e3039;
+  --color-border: #e5e7eb;
   --color-text-main: #ffffff;
   --color-text-muted: #ffffff;
   --color-card-skeleton: #14161D;
